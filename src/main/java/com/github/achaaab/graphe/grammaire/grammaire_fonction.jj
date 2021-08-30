@@ -1,0 +1,261 @@
+options {
+	STATIC = false;
+}
+
+PARSER_BEGIN(CompilateurFonction)
+
+package com.github.achaaab.graphe.grammaire;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.github.achaaab.graphe.fonction.Fonction;
+import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
+
+public class CompilateurFonction {
+
+}
+
+PARSER_END(CompilateurFonction)
+
+
+
+SKIP :
+{
+		" "
+	| "\t"
+	| "\n"
+	| "\r"
+	| "\f"
+}
+
+
+
+TOKEN :
+{
+		< OPERATEUR_ADDITION: "+" >
+|		< OPERATEUR_SOUSTRACTION: "-" >
+|		< OPERATEUR_DIVISION: "/" >
+|		< OPERATEUR_MULTIPLICATION: "*" >
+
+|		< VARIABLE: "x" | "t" >
+|		< CONSTANTE_E: "e" >
+|		< CONSTANTE_PI: "pi" >
+
+|		< NOM_FONCTION: ( ["a"-"z"]  | ["A"-"Z"] )+ >
+
+|		< SEPARATEUR_DECIMAL: "." >
+|		< NOMBRE: (["0"-"9"])+ (<SEPARATEUR_DECIMAL> (["0"-"9"])*)? >
+
+|		< PARENTHESE_GAUCHE: "(" >
+|		< PARENTHESE_DROITE: ")" >
+|		< SEPARATEUR_PARAMETRES: "," >
+}
+
+
+
+/**
+ * compile une fonction
+ */
+public Fonction compilerFonction():
+{
+	Fonction fonction;
+}
+{
+	fonction = fonctionAdditive() <EOF>
+
+	{ return fonction; }
+}
+
+
+
+/**
+ * compile une fonction additive (+ ou -)
+ */
+public Fonction fonctionAdditive():
+{
+	Fonction sousFonction0;
+	Fonction sousFonction1;
+	Fonction fonctionAdditive;
+}
+{
+	sousFonction0 = fonctionMultiplicative()
+	{ fonctionAdditive = sousFonction0; }
+
+	(
+
+			<OPERATEUR_ADDITION> sousFonction1 = fonctionMultiplicative()
+			{ fonctionAdditive = FabriqueFonction.getInstance().creerAddition(fonctionAdditive, sousFonction1); }
+		
+		|	<OPERATEUR_SOUSTRACTION> sousFonction1 = fonctionMultiplicative()
+			{ fonctionAdditive = FabriqueFonction.getInstance().creerSoustraction(fonctionAdditive, sousFonction1); }
+
+	)*
+	
+	{ return fonctionAdditive; }
+}
+
+
+
+/**
+ * compile une fonction multiplicative (* ou /)
+ */
+public Fonction fonctionMultiplicative():
+{
+	Fonction sousFonction0;
+	Fonction sousFonction1;
+	Fonction fonctionMultiplicative;
+}
+{
+	sousFonction0 = fonctionUnaire()
+	{ fonctionMultiplicative = sousFonction0; }
+
+	(
+
+			<OPERATEUR_MULTIPLICATION> sousFonction1 = fonctionUnaire()
+			{ fonctionMultiplicative = FabriqueFonction.getInstance().creerMultiplication(fonctionMultiplicative, sousFonction1); }
+		
+		|	<OPERATEUR_DIVISION> sousFonction1 = fonctionUnaire()
+			{ fonctionMultiplicative = FabriqueFonction.getInstance().creerDivision(fonctionMultiplicative, sousFonction1); }
+
+	)*
+	
+	{ return fonctionMultiplicative; }
+}
+
+
+
+/**
+ * compile une fonction unaire
+ */
+public Fonction fonctionUnaire():
+{
+	Fonction sousFonction;
+	Fonction fonctionUnaire;
+}
+{
+
+	(
+			<OPERATEUR_SOUSTRACTION> sousFonction = fonctionUnaire()
+			{ fonctionUnaire = FabriqueFonction.getInstance().creerOpposition(sousFonction); }
+
+		|	fonctionUnaire = fonctionPrimaire()
+	)
+
+	{ return fonctionUnaire; }
+}
+
+
+
+/**
+ *
+ */
+public Fonction fonctionPrimaire():
+{
+	Fonction fonctionPrimaire;
+}
+{
+	(
+			fonctionPrimaire = constante()
+		|	fonctionPrimaire = identite()
+		|	fonctionPrimaire = fonctionNommee()
+		|	<PARENTHESE_GAUCHE> fonctionPrimaire = fonctionAdditive() <PARENTHESE_DROITE>
+	)
+	
+	{ return fonctionPrimaire; }
+}
+
+
+
+/**
+ * lit une constante
+ *
+ * @return la fonction constante associee
+ */
+public Fonction constante():
+{
+	Token tokenValeur;
+	double valeur;
+}
+{
+	(
+			tokenValeur = <NOMBRE>
+			{ valeur = Double.parseDouble(tokenValeur.image); }
+		
+		|	<CONSTANTE_E>
+			{ valeur = Math.E; }
+			
+		|	<CONSTANTE_PI>
+			{ valeur = Math.PI; }
+	)
+
+	{ return FabriqueFonction.getInstance().creerConstante(valeur); }	 
+}
+
+
+
+/**
+ * lit la variable
+ *
+ * @return la fonction identite
+ */
+public Fonction identite():
+{
+	Token tokenVariable;
+	Fonction identite;
+}
+{
+	tokenVariable = <VARIABLE>
+	
+	{ identite = FabriqueFonction.getInstance().creerIdentite(tokenVariable.image); }
+	
+	{ return identite; }
+}
+
+
+
+/**
+ * lit une fonction nommee, par exemple cos(...)
+ *
+ * @return la fonction lue
+ */
+public Fonction fonctionNommee():
+{
+	Token tokenNomFonction;
+	String nomFonction;
+	Fonction fonctionNommee;
+	List<Fonction> sousFonctions;
+	Fonction sousFonction;
+}
+{
+	tokenNomFonction = <NOM_FONCTION>
+	
+	{ nomFonction = tokenNomFonction.image; }
+	
+	<PARENTHESE_GAUCHE>
+	
+	{ sousFonctions = new ArrayList<Fonction>(); }
+	
+	[
+	
+	sousFonction = fonctionAdditive()
+	{ sousFonctions.add(sousFonction); }
+	
+	(
+	
+		<SEPARATEUR_PARAMETRES>
+		
+		sousFonction = fonctionAdditive()
+		{ sousFonctions.add(sousFonction); }
+	
+	)*
+	
+	]
+	
+	<PARENTHESE_DROITE>
+	
+	{ fonctionNommee = FabriqueFonction.getInstance().creerFonction(nomFonction, sousFonctions); }
+	
+	{ return fonctionNommee; }
+
+}
