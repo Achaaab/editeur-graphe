@@ -11,12 +11,6 @@ import com.github.achaaab.graphe.presentation.equation.PanneauEquationPolaire;
 public class PanneauCourbePolaire extends PanneauCourbe {
 
 	/**
-	 * UID genere le 24/06/2010
-	 */
-	private static final long serialVersionUID = -4445314944420280690L;
-
-	/**
-	 * 
 	 * @param courbePolaire
 	 */
 	public PanneauCourbePolaire(CourbePolaire courbePolaire) {
@@ -24,11 +18,7 @@ public class PanneauCourbePolaire extends PanneauCourbe {
 		super(courbePolaire);
 
 		EquationPolaire equationPolaire = courbePolaire.getEquationPolaire();
-
 		panneauEquation = new PanneauEquationPolaire(equationPolaire);
-
 		ajouterComposants();
-
 	}
-
 }

@@ -1,5 +1,7 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
+import com.github.achaaab.utilitaire.swing.SwingUtilitaire;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -7,7 +9,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
-import com.github.achaaab.utilitaire.swing.SwingUtilitaire;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * @author Jonathan Guéhenneux
@@ -17,7 +20,7 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 
 	private static final int LONGUEUR_COINS_CADRE = 8;
 
-	private PanneauGraphe panneauGraphe;
+	private final PanneauGraphe panneauGraphe;
 
 	private BufferedImage imageSansCadre;
 	private Graphics2D graphique;
@@ -34,7 +37,6 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 
 		panneauGraphe.addMouseListener(this);
 		panneauGraphe.addMouseMotionListener(this);
-
 	}
 
 	@Override
@@ -65,7 +67,6 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 		graphique = panneauGraphe.getGraphique();
 
 		dessinerCadreGrossissement(x0, y0, x1, y1);
-
 	}
 
 	@Override
@@ -79,9 +80,7 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 
 			panneauGraphe.setImageAJour(false);
 			panneauGraphe.repaint();
-
 		}
-
 	}
 
 	@Override
@@ -92,59 +91,40 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 
 		dessinerCadreGrossissement(x0, y0, x1, y1);
 
-		panneauGraphe.actualiserCoordonneesCurseur(evenement.getX(), evenement
-				.getY());
-
+		panneauGraphe.actualiserCoordonneesCurseur(evenement.getX(), evenement.getY());
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent evenement) {
-
-		panneauGraphe.actualiserCoordonneesCurseur(evenement.getX(), evenement
-				.getY());
-
+		panneauGraphe.actualiserCoordonneesCurseur(evenement.getX(), evenement.getY());
 	}
 
 	/**
-	 * 
 	 * @param x0
 	 * @param y0
 	 * @param x1
 	 * @param y1
 	 */
-	private final void dessinerCadreGrossissement(int x0, int y0, int x1, int y1) {
+	private void dessinerCadreGrossissement(int x0, int y0, int x1, int y1) {
 
 		graphique.drawImage(imageSansCadre, 0, 0, null);
 
 		graphique.setColor(Color.BLACK);
 
-		int xMinCadre = Math.min(x0, x1);
-		int yMinCadre = Math.min(y0, y1);
-		int xMaxCadre = Math.max(x0, x1);
-		int yMaxCadre = Math.max(y0, y1);
+		int xMinCadre = min(x0, x1);
+		int yMinCadre = min(y0, y1);
+		int xMaxCadre = max(x0, x1);
+		int yMaxCadre = max(y0, y1);
 
-		graphique.drawLine(xMinCadre, yMinCadre, xMinCadre
-				+ LONGUEUR_COINS_CADRE, yMinCadre);
-		graphique.drawLine(xMinCadre, yMinCadre, xMinCadre, yMinCadre
-				+ LONGUEUR_COINS_CADRE);
-
-		graphique.drawLine(xMaxCadre, yMinCadre, xMaxCadre
-				- LONGUEUR_COINS_CADRE, yMinCadre);
-		graphique.drawLine(xMaxCadre, yMinCadre, xMaxCadre, yMinCadre
-				+ LONGUEUR_COINS_CADRE);
-
-		graphique.drawLine(xMaxCadre, yMaxCadre, xMaxCadre
-				- LONGUEUR_COINS_CADRE, yMaxCadre);
-		graphique.drawLine(xMaxCadre, yMaxCadre, xMaxCadre, yMaxCadre
-				- LONGUEUR_COINS_CADRE);
-
-		graphique.drawLine(xMinCadre, yMaxCadre, xMinCadre
-				+ LONGUEUR_COINS_CADRE, yMaxCadre);
-		graphique.drawLine(xMinCadre, yMaxCadre, xMinCadre, yMaxCadre
-				- LONGUEUR_COINS_CADRE);
+		graphique.drawLine(xMinCadre, yMinCadre, xMinCadre + LONGUEUR_COINS_CADRE, yMinCadre);
+		graphique.drawLine(xMinCadre, yMinCadre, xMinCadre, yMinCadre + LONGUEUR_COINS_CADRE);
+		graphique.drawLine(xMaxCadre, yMinCadre, xMaxCadre - LONGUEUR_COINS_CADRE, yMinCadre);
+		graphique.drawLine(xMaxCadre, yMinCadre, xMaxCadre, yMinCadre + LONGUEUR_COINS_CADRE);
+		graphique.drawLine(xMaxCadre, yMaxCadre, xMaxCadre - LONGUEUR_COINS_CADRE, yMaxCadre);
+		graphique.drawLine(xMaxCadre, yMaxCadre, xMaxCadre, yMaxCadre - LONGUEUR_COINS_CADRE);
+		graphique.drawLine(xMinCadre, yMaxCadre, xMinCadre + LONGUEUR_COINS_CADRE, yMaxCadre);
+		graphique.drawLine(xMinCadre, yMaxCadre, xMinCadre, yMaxCadre - LONGUEUR_COINS_CADRE);
 
 		panneauGraphe.repaint();
-
 	}
-
 }

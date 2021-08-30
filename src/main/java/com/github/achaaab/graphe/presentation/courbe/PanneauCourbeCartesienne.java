@@ -11,19 +11,14 @@ import com.github.achaaab.graphe.presentation.equation.PanneauEquationCartesienn
 public class PanneauCourbeCartesienne extends PanneauCourbe {
 
 	/**
-	 * 
 	 * @param courbeCartesienne
 	 */
 	public PanneauCourbeCartesienne(CourbeCartesienne courbeCartesienne) {
 
 		super(courbeCartesienne);
 
-		EquationCartesienne equationCartesienne = courbeCartesienne.getEquationCartesienne();
-
+		var equationCartesienne = courbeCartesienne.getEquationCartesienne();
 		panneauEquation = new PanneauEquationCartesienne(equationCartesienne);
-
 		ajouterComposants();
-
 	}
-
 }

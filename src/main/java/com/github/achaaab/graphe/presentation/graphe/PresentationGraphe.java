@@ -17,11 +17,6 @@ import com.github.achaaab.graphe.presentation.courbe.PanneauCourbes;
  */
 public class PresentationGraphe extends JSplitPane {
 
-	/**
-	 * UID genere le 17/06/2010
-	 */
-	private static final long serialVersionUID = -6375669030883272767L;
-
 	private JSplitPane panneauHaut;
 	private JPanel panneauGauche;
 
@@ -35,7 +30,7 @@ public class PresentationGraphe extends JSplitPane {
 
 	private PanneauCourbes panneauCourbes;
 
-	private Graphe graphe;
+	private final Graphe graphe;
 
 	/**
 	 * @param graphe
@@ -51,13 +46,12 @@ public class PresentationGraphe extends JSplitPane {
 
 		creerComposants();
 		ajouterComposants();
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
 		panneauHaut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		panneauHaut.setOneTouchExpandable(true);
@@ -79,13 +73,12 @@ public class PresentationGraphe extends JSplitPane {
 		panneauGauche.setMinimumSize(new Dimension(0, 0));
 		panneauFenetre.setMinimumSize(new Dimension(0, 0));
 		panneauCourbes.setMinimumSize(new Dimension(0, 0));
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		panneauGauche.add(panneauGrapheAscenseurs, BorderLayout.CENTER);
 		panneauGauche.add(panneauCoordonnees, BorderLayout.SOUTH);
@@ -95,20 +88,19 @@ public class PresentationGraphe extends JSplitPane {
 
 		setLeftComponent(panneauHaut);
 		setRightComponent(panneauCourbes);
-
 	}
 
 	/**
 	 * 
 	 */
-	public final void actualiserFenetre() {
+	public void actualiserFenetre() {
 		panneauFenetre.actualiser();
 	}
 
 	/**
 	 * 
 	 */
-	public final void actualiserGraphe() {
+	public void actualiserGraphe() {
 		panneauGraphe.recalculerImage();
 	}
 
@@ -116,7 +108,7 @@ public class PresentationGraphe extends JSplitPane {
 	 * 
 	 * @param courbe
 	 */
-	public final void ajouterCourbe(Courbe courbe) {
+	public void ajouterCourbe(Courbe courbe) {
 		panneauCourbes.ajouterCourbe(courbe);
 	}
 
@@ -124,15 +116,14 @@ public class PresentationGraphe extends JSplitPane {
 	 * 
 	 * @param courbe
 	 */
-	public final void supprimerCourbe(Courbe courbe) {
+	public void supprimerCourbe(Courbe courbe) {
 		panneauCourbes.supprimerCourbe(courbe);
 	}
 
 	/**
 	 * 
 	 */
-	public final void actualiserListeCourbes() {
+	public void actualiserListeCourbes() {
 		panneauCourbes.redessinerListeCourbes();
 	}
-
 }

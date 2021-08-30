@@ -23,26 +23,20 @@ import com.github.achaaab.utilitaire.swing.PanneauVariable;
  */
 public class PanneauCourbes extends PanneauVariable {
 
-	/**
-	 * UID genere le 23/06/2010
-	 */
-	private static final long serialVersionUID = 7162369836022667540L;
+	private static final Dimension DIMENSION_DEFAUT = new Dimension(512, 320);
 
-	private static final Dimension DIMENSION_PANNEAU_COURBE = new Dimension(
-			512, 320);
+	private final Graphe graphe;
 
-	private JComboBox presentationCourbes;
-	private PanneauCourbe panneauCourbe;
+	private JComboBox<Courbe> presentationCourbes;
 	private JScrollPane panneauCourbeAscenseurs;
 
 	private JPanel panneauBoutons;
 	private JButton ajouter;
 	private JButton supprimer;
 
-	private Graphe graphe;
-
 	/**
 	 * @param graphe
+	 * @since 0.0.0
 	 */
 	public PanneauCourbes(Graphe graphe) {
 
@@ -53,30 +47,28 @@ public class PanneauCourbes extends PanneauVariable {
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteurs();
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
-		presentationCourbes = new JComboBox();
+		presentationCourbes = new JComboBox<>();
 		presentationCourbes.setRenderer(RenduListeCourbes.getInstance());
 
 		panneauCourbeAscenseurs = new JScrollPane();
-		panneauCourbeAscenseurs.setPreferredSize(DIMENSION_PANNEAU_COURBE);
+		panneauCourbeAscenseurs.setPreferredSize(DIMENSION_DEFAUT);
 
 		panneauBoutons = new JPanel();
 		ajouter = new JButton("Ajouter");
 		supprimer = new JButton("Supprimer");
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		add(presentationCourbes, BorderLayout.NORTH);
 
@@ -85,13 +77,12 @@ public class PanneauCourbes extends PanneauVariable {
 		panneauBoutons.add(ajouter);
 		panneauBoutons.add(supprimer);
 		add(panneauBoutons, BorderLayout.SOUTH);
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void ajouterEcouteurs() {
+	private void ajouterEcouteurs() {
 
 		/*
 		 * lors de la selection d'une courbe dans la combo box, on supprime du
@@ -99,54 +90,33 @@ public class PanneauCourbes extends PanneauVariable {
 		 * ajoute le nouveau
 		 */
 
-		presentationCourbes.addActionListener(new ActionListener() {
+		presentationCourbes.addActionListener(evenement -> actualiserPanneauCourbe());
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-				actualiserPanneauCourbe();
+		ajouter.addActionListener(evenement -> {
+
+			PresentationNouvelleCourbe presentationNouvelleCourbe = new PresentationNouvelleCourbe(
+					PanneauCourbes.this);
+
+			presentationNouvelleCourbe.setVisible(true);
+
+			Courbe courbe = presentationNouvelleCourbe.getCourbe();
+
+			if (courbe != null) {
+
+				graphe.ajouterCourbe(courbe);
+				presentationCourbes.setSelectedItem(courbe);
+				graphe.actualiserGraphe();
 			}
-
 		});
 
-		ajouter.addActionListener(new ActionListener() {
+		supprimer.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
+			Courbe courbe = (Courbe) presentationCourbes.getSelectedItem();
 
-				PresentationNouvelleCourbe presentationNouvelleCourbe = new PresentationNouvelleCourbe(
-						PanneauCourbes.this);
-
-				presentationNouvelleCourbe.setVisible(true);
-
-				Courbe courbe = presentationNouvelleCourbe.getCourbe();
-
-				if (courbe != null) {
-
-					graphe.ajouterCourbe(courbe);
-					presentationCourbes.setSelectedItem(courbe);
-					graphe.actualiserGraphe();
-
-				}
-
+			if (courbe != null) {
+				graphe.supprimerCourbe(courbe);
 			}
-
 		});
-
-		supprimer.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				Courbe courbe = (Courbe) presentationCourbes.getSelectedItem();
-
-				if (courbe != null) {
-					graphe.supprimerCourbe(courbe);
-				}
-
-			}
-
-		});
-
 	}
 
 	/**
@@ -159,19 +129,18 @@ public class PanneauCourbes extends PanneauVariable {
 		Courbe[] courbes = new Courbe[nombreCourbes];
 		listeCourbes.toArray(courbes);
 
-		ComboBoxModel modeleCourbes = new DefaultComboBoxModel(courbes);
+		var modeleCourbes = new DefaultComboBoxModel<>(courbes);
 
 		presentationCourbes.setModel(modeleCourbes);
 
 		actualiserPanneauCourbe();
-
 	}
 
 	/**
 	 * 
 	 * @param courbe
 	 */
-	public final void ajouterCourbe(Courbe courbe) {
+	public void ajouterCourbe(Courbe courbe) {
 		presentationCourbes.addItem(courbe);
 	}
 
@@ -179,17 +148,16 @@ public class PanneauCourbes extends PanneauVariable {
 	 * 
 	 * @param courbe
 	 */
-	public final void supprimerCourbe(Courbe courbe) {
+	public void supprimerCourbe(Courbe courbe) {
 		presentationCourbes.removeItem(courbe);
 	}
 
 	/**
 	 * 
 	 */
-	public final void actualiserPanneauCourbe() {
+	public void actualiserPanneauCourbe() {
 
-		Courbe courbeSelectionnee = (Courbe) presentationCourbes
-				.getSelectedItem();
+		Courbe courbeSelectionnee = (Courbe) presentationCourbes.getSelectedItem();
 
 		if (panneauCourbeAscenseurs != null) {
 			remove(panneauCourbeAscenseurs);
@@ -197,26 +165,23 @@ public class PanneauCourbes extends PanneauVariable {
 
 		if (courbeSelectionnee != null) {
 
-			panneauCourbe = courbeSelectionnee.getPresentation();
+			PanneauCourbe panneauCourbe = courbeSelectionnee.getPresentation();
 			panneauCourbe.setGraphe(graphe);
 
 			panneauCourbeAscenseurs = new JScrollPane(panneauCourbe);
-			panneauCourbeAscenseurs.setPreferredSize(DIMENSION_PANNEAU_COURBE);
+			panneauCourbeAscenseurs.setPreferredSize(DIMENSION_DEFAUT);
 
 			add(panneauCourbeAscenseurs, BorderLayout.CENTER);
-
 		}
 
 		revalidate();
 		repaint();
-
 	}
 
 	/**
 	 * 
 	 */
-	public final void redessinerListeCourbes() {
+	public void redessinerListeCourbes() {
 		presentationCourbes.repaint();
 	}
-
 }

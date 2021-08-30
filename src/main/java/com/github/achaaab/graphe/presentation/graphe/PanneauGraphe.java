@@ -1,5 +1,9 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
+import com.github.achaaab.graphe.Graphe;
+import com.github.achaaab.graphe.courbe.Courbe;
+import com.github.achaaab.utilitaire.swing.PanneauTampon;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -11,9 +15,8 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.util.List;
 
-import com.github.achaaab.graphe.Graphe;
-import com.github.achaaab.graphe.courbe.Courbe;
-import com.github.achaaab.utilitaire.swing.PanneauTampon;
+import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+import static java.awt.geom.AffineTransform.getScaleInstance;
 
 /**
  * @author Jonathan Guéhenneux
@@ -21,29 +24,19 @@ import com.github.achaaab.utilitaire.swing.PanneauTampon;
  */
 public class PanneauGraphe extends PanneauTampon {
 
-	/**
-	 * UID genere le 15/06/2010
-	 */
-	private static final long serialVersionUID = -5006186588671314234L;
-
 	private static final int LARGEUR_MINIMUM = 400;
 	private static final int LARGEUR_IDEALE = 400;
 
 	private static final int HAUTEUR_MINIMUM = 300;
 	private static final int HAUTEUR_IDEALE = 300;
 
-	private static final Dimension DIMENSION_MINIMUM = new Dimension(
-			LARGEUR_MINIMUM, HAUTEUR_MINIMUM);
+	private static final Dimension DIMENSION_MINIMUM = new Dimension(LARGEUR_MINIMUM, HAUTEUR_MINIMUM);
+	private static final Dimension DIMENSION_IDEALE = new Dimension(LARGEUR_IDEALE, HAUTEUR_IDEALE);
 
-	private static final Dimension DIMENSION_IDEALE = new Dimension(
-			LARGEUR_IDEALE, HAUTEUR_IDEALE);
-
-	private PanneauCoordonnees panneauCoordonnees;
-
-	private Graphe graphe;
+	private final PanneauCoordonnees panneauCoordonnees;
+	private final Graphe graphe;
 
 	/**
-	 * 
 	 * @param graphe
 	 * @param panneauCoordonnees
 	 */
@@ -83,7 +76,7 @@ public class PanneauGraphe extends PanneauTampon {
 		 * dessin des courbes
 		 */
 
-		AffineTransform transformationAffine = getTransformationAffine();
+		var transformationAffine = getTransformationAffine();
 
 		List<Courbe> courbes = graphe.getCourbes();
 		Shape formeCourbe;
@@ -92,51 +85,39 @@ public class PanneauGraphe extends PanneauTampon {
 
 			graphique.setColor(courbe.getCouleur());
 			formeCourbe = courbe.getForme();
-
-			formeCourbe = transformationAffine
-					.createTransformedShape(formeCourbe);
-
+			formeCourbe = transformationAffine.createTransformedShape(formeCourbe);
 			graphique.draw(formeCourbe);
-
 		}
-
 	}
 
 	/**
-	 * 
 	 * @return la transformation affine permettant d'adapter les coordonnees du
-	 *         graphe aux coordonnees de l'ecran
+	 * graphe aux coordonnees de l'ecran
 	 */
-	private final AffineTransform getTransformationAffine() {
+	private AffineTransform getTransformationAffine() {
 
-		/*
-		 * on recupere la fenetre du graphe
-		 */
-
-		double xMin = graphe.getXMin();
-		double xMax = graphe.getXMax();
-		double yMin = graphe.getYMin();
-		double yMax = graphe.getYMax();
+		var xMin = graphe.getXMin();
+		var xMax = graphe.getXMax();
+		var yMin = graphe.getYMin();
+		var yMax = graphe.getYMax();
 
 		/*
 		 * transformation affine du graphe
 		 */
 
-		AffineTransform transformationAffine = AffineTransform
-				.getScaleInstance(largeur / (xMax - xMin), hauteur
-						/ (yMin - yMax));
+		var transformationAffine = getScaleInstance(
+				largeur / (xMax - xMin),
+				hauteur / (yMin - yMax));
 
 		transformationAffine.translate(-xMin, -yMax);
 
 		return transformationAffine;
-
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
-	private final Shape getAxeX() {
+	private Shape getAxeX() {
 
 		/*
 		 * parametres de l'axe
@@ -202,7 +183,6 @@ public class PanneauGraphe extends PanneauTampon {
 					pointGraduationEcran.getY() - 3);
 
 			axeX.append(graduation, false);
-
 		}
 
 		/*
@@ -222,18 +202,15 @@ public class PanneauGraphe extends PanneauTampon {
 					pointGraduationEcran.getY() - 3);
 
 			axeX.append(graduation, false);
-
 		}
 
 		return axeX;
-
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
-	private final Shape getAxeY() {
+	private Shape getAxeY() {
 
 		/*
 		 * parametres de l'axe
@@ -297,10 +274,9 @@ public class PanneauGraphe extends PanneauTampon {
 			graduation = new Line2D.Double(pointGraduationEcran.getX(),
 					pointGraduationEcran.getY(),
 					pointGraduationEcran.getX() + 3, pointGraduationEcran
-							.getY());
+					.getY());
 
 			axeY.append(graduation, false);
-
 		}
 
 		/*
@@ -318,24 +294,21 @@ public class PanneauGraphe extends PanneauTampon {
 			graduation = new Line2D.Double(pointGraduationEcran.getX(),
 					pointGraduationEcran.getY(),
 					pointGraduationEcran.getX() + 3, pointGraduationEcran
-							.getY());
+					.getY());
 
 			axeY.append(graduation, false);
-
 		}
 
 		return axeY;
-
 	}
 
 	/**
-	 * 
 	 * @param x0
 	 * @param y0
 	 * @param x1
 	 * @param y1
 	 */
-	public final void grossir(int x0, int y0, int x1, int y1) {
+	public void grossir(int x0, int y0, int x1, int y1) {
 
 		AffineTransform transformationAffine = getTransformationAffine();
 
@@ -360,19 +333,18 @@ public class PanneauGraphe extends PanneauTampon {
 
 			graphe.setXMax(xMax);
 			graphe.setYMax(yMax);
-			
+
 			graphe.actualiserFenetre();
 
 		} catch (NoninvertibleTransformException erreur) {
 
+			traiter(erreur);
 		}
 
 		recalculerImage();
-
 	}
 
 	/**
-	 * 
 	 * @param xEcran
 	 * @param yEcran
 	 */
@@ -392,8 +364,7 @@ public class PanneauGraphe extends PanneauTampon {
 
 		} catch (NoninvertibleTransformException erreur) {
 
+			traiter(erreur);
 		}
-
 	}
-
 }

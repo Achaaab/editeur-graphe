@@ -15,16 +15,13 @@ import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
 import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
 import com.github.achaaab.utilitaire.GestionnaireException;
 
+import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class PanneauEquationCartesienne extends PanneauEquation {
-
-	/**
-	 * UID genere le 24/06/2010
-	 */
-	private static final long serialVersionUID = -5284515665897650103L;
 
 	private JLabel labelF;
 	private JTextField champF;
@@ -43,13 +40,12 @@ public class PanneauEquationCartesienne extends PanneauEquation {
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteurs();
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
 		labelF = new JLabel("y = f(x) = ");
 
@@ -63,7 +59,7 @@ public class PanneauEquationCartesienne extends PanneauEquation {
 	/**
 	 * 
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		GridBagConstraints contraintes = new GridBagConstraints();
 		contraintes.insets = new Insets(2, 2, 2, 2);
@@ -86,33 +82,23 @@ public class PanneauEquationCartesienne extends PanneauEquation {
 	/**
 	 * 
 	 */
-	private final void ajouterEcouteurs() {
+	private void ajouterEcouteurs() {
 
-		champF.addActionListener(new ActionListener() {
+		champF.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
+			try {
 
-				try {
+				String texteF = champF.getText();
 
-					String texteF = champF.getText();
+				Fonction f = FabriqueFonction.getInstance().creerFonction(texteF);
 
-					Fonction f = FabriqueFonction.getInstance().creerFonction(
-							texteF);
+				equationCartesienne.setF(f);
+				graphe.actualiserGraphe();
 
-					equationCartesienne.setF(f);
-					graphe.actualiserGraphe();
+			} catch (ErreurSyntaxe erreurSyntaxe) {
 
-				} catch (ErreurSyntaxe erreurSyntaxe) {
-
-					GestionnaireException.traiter(erreurSyntaxe);
-
-				}
-
+				traiter(erreurSyntaxe);
 			}
-
 		});
-
 	}
-
 }

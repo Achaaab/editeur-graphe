@@ -24,11 +24,6 @@ import com.github.achaaab.graphe.courbe.TypeCourbe;
  */
 public class PresentationNouvelleCourbe extends JDialog {
 
-	/**
-	 * UID genere le 24/06/2010
-	 */
-	private static final long serialVersionUID = -8476276040725610552L;
-
 	private static final String TITRE = "Nouvelle courbe";
 
 	private ButtonGroup typesCourbe;
@@ -65,7 +60,6 @@ public class PresentationNouvelleCourbe extends JDialog {
 
 		pack();
 		setLocationRelativeTo(composantParent);
-
 	}
 
 	/**

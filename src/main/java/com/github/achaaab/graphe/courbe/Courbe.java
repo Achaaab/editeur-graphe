@@ -7,7 +7,7 @@ import java.awt.Color;
 import java.awt.Shape;
 
 /**
- * interface definissant une courbe
+ * interface définissant une courbe
  *
  * @author Jonathan Guéhenneux
  * @since 0.0.0
@@ -15,86 +15,100 @@ import java.awt.Shape;
 public interface Courbe {
 
 	/**
-	 * @return l'equation de la courbe
+	 * @return équation de la courbe
+	 * @since 0.0.0
 	 */
 	Equation getEquation();
 
 	/**
-	 * @return la couleur de la courbe
+	 * @return couleur de la courbe
+	 * @since 0.0.0
 	 */
 	Color getCouleur();
 
 	/**
-	 * @param couleur la couleur de la courbe
+	 * @param couleur couleur de la courbe
+	 * @since 0.0.0
 	 */
 	void setCouleur(Color couleur);
 
 	/**
-	 * @return la forme de la courbe
+	 * @return forme de la courbe
+	 * @since 0.0.0
 	 */
 	Shape getForme();
 
 	/**
-	 * @return le minimum du domaine de definition de la courbe
+	 * @return minimum du domaine de définition de la courbe
+	 * @since 0.0.0
 	 */
 	double getMin();
 
 	/**
-	 * @param min le minimum du domaine de definition de la courbe
+	 * @param min minimum du domaine de définition de la courbe
+	 * @since 0.0.0
 	 */
 	void setMin(double min);
 
 	/**
-	 * @return le maximum du domaine de definition de la courbe
+	 * @return maximum du domaine de définition de la courbe
+	 * @since 0.0.0
 	 */
 	double getMax();
 
 	/**
-	 * @param max le maximum du domaine de definition de la courbe
+	 * @param max maximum du domaine de définition de la courbe
+	 * @since 0.0.0
 	 */
 	void setMax(double max);
 
 	/**
-	 * @return le pas de dessin de la courbe (l'ecart entre 2 valeurs prises
-	 * dans le domaine de definition)
+	 * @return pas de dessin de la courbe (différence entre 2 valeurs consécutives du domaine de définition)
+	 * @since 0.0.0
 	 */
 	double getPas();
 
 	/**
-	 * @param pas le pas de dessin de la courbe (l'ecart entre 2 valeurs prises
-	 * dans le domaine de definition)
+	 * @param pas pas de dessin de la courbe (différence entre 2 valeurs consécutives du domaine de définition)
+	 * @since 0.0.0
 	 */
 	void setPas(double pas);
 
 	/**
-	 * @param interpolee true si la courbe est interpolee (un segment est tracé d'un
-	 * point de la courbe au suivant), false sinon
+	 * @param interpolee true si la courbe est interpolée (un segment est tracé d'un point de la courbe au suivant),
+	 * false sinon
+	 * @since 0.0.0
 	 */
 	void setInterpolee(boolean interpolee);
 
 	/**
-	 * @return true si la courbe est interpolee (un segment est tracé d'un
-	 * point de la courbe au suivant), false sinon
+	 * @return true si la courbe est interpolée (un segment est tracé d'un point de la courbe au suivant),
+	 * false sinon
+	 * @since 0.0.0
 	 */
 	boolean isInterpolee();
 
 	/**
-	 * @return le nom de la courbe
+	 * @return nom de la courbe
+	 * @since 0.0.0
 	 */
 	String getNom();
 
 	/**
-	 * @param nom le nom de la courbe
+	 * @param nom nom de la courbe
+	 * @since 0.0.0
 	 */
 	void setNom(String nom);
 
 	/**
-	 * @return le type de la courbe
+	 * @return type de la courbe
+	 * @since 0.0.0
 	 */
 	TypeCourbe getType();
 
 	/**
-	 * @return la presentation de la courbe (panneau de parametrage)
+	 * @return présentation de la courbe (panneau de paramétrage)
+	 * @since 0.0.0
 	 */
 	PanneauCourbe getPresentation();
 }

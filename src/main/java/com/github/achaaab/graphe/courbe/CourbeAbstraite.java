@@ -1,31 +1,29 @@
 package com.github.achaaab.graphe.courbe;
 
+import com.github.achaaab.graphe.presentation.courbe.PanneauCourbe;
+
 import java.awt.Color;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 
-import com.github.achaaab.graphe.presentation.courbe.PanneauCourbe;
-
 /**
  * classe abstraite definissant une courbe quelconque
- * 
+ *
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public abstract class CourbeAbstraite implements Courbe {
 
 	protected String nom;
-
-	protected double min, max, pas;
-
+	protected double min;
+	protected double max;
+	protected double pas;
 	protected boolean interpolee;
-
 	protected Color couleur;
 
 	protected PanneauCourbe presentation;
 
 	/**
-	 * 
 	 * @param nom
 	 */
 	public CourbeAbstraite(String nom) {
@@ -33,7 +31,6 @@ public abstract class CourbeAbstraite implements Courbe {
 	}
 
 	/**
-	 * 
 	 * @param nom
 	 * @param couleur
 	 */
@@ -46,21 +43,19 @@ public abstract class CourbeAbstraite implements Courbe {
 		max = 10;
 		pas = 0.1;
 		interpolee = true;
-
 	}
 
 	@Override
-	public final Color getCouleur() {
+	public Color getCouleur() {
 		return couleur;
 	}
 
 	@Override
-	public final void setCouleur(Color couleur) {
+	public void setCouleur(Color couleur) {
 
 		this.couleur = couleur;
 
 		presentation.actualiserCouleurCourbe();
-
 	}
 
 	/**
@@ -71,8 +66,7 @@ public abstract class CourbeAbstraite implements Courbe {
 	}
 
 	/**
-	 * @param min
-	 *            the min to set
+	 * @param min the min to set
 	 */
 	public final void setMin(double min) {
 		this.min = min;
@@ -131,18 +125,15 @@ public abstract class CourbeAbstraite implements Courbe {
 	}
 
 	/**
-	 * 
 	 * @param forme
 	 * @param x0
 	 * @param y0
 	 * @param x1
 	 * @param y1
 	 */
-	protected static final void ajouterSegment(GeneralPath forme, double x0,
-			double y0, double x1, double y1) {
+	protected static void ajouterSegment(GeneralPath forme, double x0,
+										 double y0, double x1, double y1) {
 
 		forme.append(new Line2D.Double(x0, y0, x1, y1), false);
-
 	}
-
 }

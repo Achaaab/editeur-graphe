@@ -1,14 +1,13 @@
 package com.github.achaaab.graphe.presentation.courbe;
 
-import java.awt.Component;
-import java.awt.Dimension;
+import com.github.achaaab.graphe.courbe.Courbe;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-
-import com.github.achaaab.graphe.courbe.Courbe;
+import java.awt.Component;
+import java.awt.Dimension;
 
 /**
  * @author Jonathan Guéhenneux
@@ -26,7 +25,6 @@ public class RenduListeCourbes implements ListCellRenderer<Courbe> {
 	private static RenduListeCourbes instance;
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static synchronized RenduListeCourbes getInstance() {
@@ -58,11 +56,8 @@ public class RenduListeCourbes implements ListCellRenderer<Courbe> {
 
 			cellule.setForeground(courbe.getCouleur());
 			cellule.setPreferredSize(DIMENSION_OPTIMALE);
-
 		}
 
 		return cellule;
-
 	}
-
 }

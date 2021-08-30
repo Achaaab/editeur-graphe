@@ -15,16 +15,13 @@ import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
 import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
 import com.github.achaaab.utilitaire.GestionnaireException;
 
+import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class PanneauEquationParametrique extends PanneauEquation {
-
-	/**
-	 * UID genere le 24/06/2010
-	 */
-	private static final long serialVersionUID = 4114829001282179153L;
 
 	private JLabel labelF;
 	private JTextField champF;
@@ -35,7 +32,6 @@ public class PanneauEquationParametrique extends PanneauEquation {
 	private EquationParametrique equationParametrique;
 
 	/**
-	 * 
 	 * @param equationParametrique
 	 */
 	public PanneauEquationParametrique(EquationParametrique equationParametrique) {
@@ -47,13 +43,12 @@ public class PanneauEquationParametrique extends PanneauEquation {
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteurs();
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
 		labelF = new JLabel("x = f(t) = ");
 		labelG = new JLabel("y = g(t) = ");
@@ -66,13 +61,12 @@ public class PanneauEquationParametrique extends PanneauEquation {
 
 		champG = new JTextField(50);
 		champG.setText(g.getTexte());
-
 	}
 
 	/**
 	 * 
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		GridBagConstraints contraintes = new GridBagConstraints();
 		contraintes.insets = new Insets(2, 2, 2, 2);
@@ -100,7 +94,6 @@ public class PanneauEquationParametrique extends PanneauEquation {
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
 		add(champG, contraintes);
-
 	}
 
 	/**
@@ -108,56 +101,40 @@ public class PanneauEquationParametrique extends PanneauEquation {
 	 */
 	private final void ajouterEcouteurs() {
 
-		champF.addActionListener(new ActionListener() {
+		champF.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
+			try {
 
-				try {
+				String texteF = champF.getText();
 
-					String texteF = champF.getText();
+				Fonction f = FabriqueFonction.getInstance().creerFonction(
+						texteF);
 
-					Fonction f = FabriqueFonction.getInstance().creerFonction(
-							texteF);
+				equationParametrique.setF(f);
+				graphe.actualiserGraphe();
 
-					equationParametrique.setF(f);
-					graphe.actualiserGraphe();
+			} catch (ErreurSyntaxe erreurSyntaxe) {
 
-				} catch (ErreurSyntaxe erreurSyntaxe) {
-
-					GestionnaireException.traiter(erreurSyntaxe);
-
-				}
-
+				traiter(erreurSyntaxe);
 			}
-
 		});
 
-		champG.addActionListener(new ActionListener() {
+		champG.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
+			try {
 
-				try {
+				String texteG = champG.getText();
 
-					String texteG = champG.getText();
+				Fonction g = FabriqueFonction.getInstance().creerFonction(
+						texteG);
 
-					Fonction g = FabriqueFonction.getInstance().creerFonction(
-							texteG);
+				equationParametrique.setG(g);
+				graphe.actualiserGraphe();
 
-					equationParametrique.setG(g);
-					graphe.actualiserGraphe();
+			} catch (ErreurSyntaxe erreurSyntaxe) {
 
-				} catch (ErreurSyntaxe erreurSyntaxe) {
-
-					GestionnaireException.traiter(erreurSyntaxe);
-
-				}
-
+				traiter(erreurSyntaxe);
 			}
-
 		});
-
 	}
-
 }

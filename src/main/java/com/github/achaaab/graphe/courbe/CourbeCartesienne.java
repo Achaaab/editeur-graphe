@@ -28,7 +28,6 @@ public class CourbeCartesienne extends CourbeAbstraite {
 		this.equation = equation;
 
 		presentation = new PanneauCourbeCartesienne(this);
-
 	}
 
 	@Override

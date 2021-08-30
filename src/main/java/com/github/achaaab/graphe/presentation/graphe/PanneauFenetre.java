@@ -1,29 +1,24 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.github.achaaab.graphe.Graphe;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import com.github.achaaab.graphe.Graphe;
+import static java.lang.Double.parseDouble;
+import static javax.swing.BorderFactory.createCompoundBorder;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.BorderFactory.createTitledBorder;
 
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class PanneauFenetre extends JPanel {
-
-	/**
-	 * UID genere le 22/06/2010
-	 */
-	private static final long serialVersionUID = 5738050152988523053L;
 
 	private static final String TITRE = "Fenêtre";
 
@@ -43,7 +38,7 @@ public class PanneauFenetre extends JPanel {
 	private JTextField champYMax;
 	private JTextField champGraduationY;
 
-	private Graphe graphe;
+	private final Graphe graphe;
 
 	/**
 	 * @param graphe
@@ -52,11 +47,9 @@ public class PanneauFenetre extends JPanel {
 
 		this.graphe = graphe;
 
-		Border bordureExterne = BorderFactory.createTitledBorder(TITRE);
-		Border bordureInterne = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-
-		Border bordure = BorderFactory.createCompoundBorder(bordureExterne,
-				bordureInterne);
+		var bordureExterne = createTitledBorder(TITRE);
+		var bordureInterne = createEmptyBorder(5, 5, 5, 5);
+		var bordure = createCompoundBorder(bordureExterne, bordureInterne);
 
 		setBorder(bordure);
 
@@ -65,13 +58,12 @@ public class PanneauFenetre extends JPanel {
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteurs();
-
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
 		labelXMin = new JLabel("X.minimum");
 		labelXMax = new JLabel("X.maximum");
@@ -90,13 +82,12 @@ public class PanneauFenetre extends JPanel {
 		champGraduationY = new JTextField(5);
 
 		actualiser();
-
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	public final void actualiser() {
+	public void actualiser() {
 
 		double xMin = graphe.getXMin();
 		double xMax = graphe.getXMax();
@@ -113,13 +104,12 @@ public class PanneauFenetre extends JPanel {
 		champYMin.setText(Double.toString(yMin));
 		champYMax.setText(Double.toString(yMax));
 		champGraduationY.setText(Double.toString(graduationY));
-
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		GridBagConstraints contraintes = new GridBagConstraints();
 		contraintes.anchor = GridBagConstraints.LINE_START;
@@ -164,94 +154,53 @@ public class PanneauFenetre extends JPanel {
 
 		contraintes.gridy = 5;
 		add(champGraduationY, contraintes);
-
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	private final void ajouterEcouteurs() {
+	private void ajouterEcouteurs() {
 
-		champXMin.addActionListener(new ActionListener() {
+		champXMin.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				double xMin = Double.parseDouble(champXMin.getText());
-				graphe.setXMin(xMin);
-				graphe.actualiserGraphe();
-
-			}
-
+			double xMin = parseDouble(champXMin.getText());
+			graphe.setXMin(xMin);
+			graphe.actualiserGraphe();
 		});
 
-		champXMax.addActionListener(new ActionListener() {
+		champXMax.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				double xMax = Double.parseDouble(champXMax.getText());
-				graphe.setXMax(xMax);
-				graphe.actualiserGraphe();
-
-			}
-
+			double xMax = parseDouble(champXMax.getText());
+			graphe.setXMax(xMax);
+			graphe.actualiserGraphe();
 		});
 
-		champGraduationX.addActionListener(new ActionListener() {
+		champGraduationX.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				double graduationX = Double.parseDouble(champGraduationX
-						.getText());
-				graphe.setGraduationX(graduationX);
-				graphe.actualiserGraphe();
-
-			}
-
+			double graduationX = parseDouble(champGraduationX.getText());
+			graphe.setGraduationX(graduationX);
+			graphe.actualiserGraphe();
 		});
 
-		champYMin.addActionListener(new ActionListener() {
+		champYMin.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				double yMin = Double.parseDouble(champYMin.getText());
-				graphe.setYMin(yMin);
-				graphe.actualiserGraphe();
-
-			}
-
+			double yMin = parseDouble(champYMin.getText());
+			graphe.setYMin(yMin);
+			graphe.actualiserGraphe();
 		});
 
-		champYMax.addActionListener(new ActionListener() {
+		champYMax.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				double yMax = Double.parseDouble(champYMax.getText());
-				graphe.setYMax(yMax);
-				graphe.actualiserGraphe();
-
-			}
-
+			double yMax = parseDouble(champYMax.getText());
+			graphe.setYMax(yMax);
+			graphe.actualiserGraphe();
 		});
 
-		champGraduationY.addActionListener(new ActionListener() {
+		champGraduationY.addActionListener(evenement -> {
 
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-
-				double graduationY = Double.parseDouble(champGraduationY
-						.getText());
-				graphe.setGraduationY(graduationY);
-				graphe.actualiserGraphe();
-
-			}
-
+			double graduationY = parseDouble(champGraduationY.getText());
+			graphe.setGraduationY(graduationY);
+			graphe.actualiserGraphe();
 		});
-
 	}
-
 }
