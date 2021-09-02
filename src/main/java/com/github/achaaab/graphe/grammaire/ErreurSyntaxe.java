@@ -3,85 +3,72 @@ package com.github.achaaab.graphe.grammaire;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.System.getProperty;
+
 /**
- * 
- * @author guehenneux
- * 
+ * @author Jonathan Guéhenneux
+ * @since 0.0.0
  */
 public class ErreurSyntaxe extends Exception {
 
-	/**
-	 * UID genere le 16/06/2010
-	 */
-	private static final long serialVersionUID = -926772550077253865L;
-
-	private static final String SAUT_LIGNE = System.getProperty(
-			"line.separator", "\n");
+	private static final String SAUT_LIGNE = getProperty("line.separator", "\n");
 
 	/**
-	 * 
 	 * @param cause
+	 * @since 0.0.0
 	 */
 	public ErreurSyntaxe(ParseException cause) {
 		super(fabriquerMessage(cause));
 	}
 
 	/**
-	 * 
 	 * @param cause
 	 * @return
 	 */
-	private static final String fabriquerMessage(ParseException cause) {
+	private static String fabriquerMessage(ParseException cause) {
 
-		StringBuilder fabriqueMessage = new StringBuilder();
+		var message = new StringBuilder();
 
-		String[] imagesSymboles = CompilateurFonctionConstants.tokenImage;
-		imagesSymboles[0] = "<FIN_DE_TEXTE>";
+		var imagesSymboles = CompilateurFonctionConstants.tokenImage;
 
-		int ligne = cause.currentToken.next.beginLine;
-		int colonne = cause.currentToken.next.beginColumn;
+		var ligne = cause.currentToken.next.beginLine;
+		var colonne = cause.currentToken.next.beginColumn;
+		var premierSymbole = colonne <= 1;
+		var symboleCourant = imagesSymboles[cause.currentToken.kind];
+		var symboleSuivant = imagesSymboles[cause.currentToken.next.kind];
+		var symbolesAttendus = cause.expectedTokenSequences;
+		var listeSymbolesAttendus = new ArrayList<String>();
 
-		boolean premierSymbole = colonne <= 1;
+		StringBuilder sequenceSymbolesString;
 
-		String symboleCourant = imagesSymboles[cause.currentToken.kind];
-		String symboleSuivant = imagesSymboles[cause.currentToken.next.kind];
+		for (var sequenceSymboles : symbolesAttendus) {
 
-		int[][] symbolesAttendus = cause.expectedTokenSequences;
+			sequenceSymbolesString = new StringBuilder();
 
-		List<String> listeSymbolesAttendus = new ArrayList<String>();
-
-		String sequenceSymbolesString;
-
-		for (int[] sequenceSymboles : symbolesAttendus) {
-
-			sequenceSymbolesString = "";
-
-			for (int symbole : sequenceSymboles) {
-				sequenceSymbolesString += imagesSymboles[symbole];
+			for (var symbole : sequenceSymboles) {
+				sequenceSymbolesString.append(imagesSymboles[symbole]);
 			}
 
-			listeSymbolesAttendus.add(sequenceSymbolesString);
-
+			listeSymbolesAttendus.add(sequenceSymbolesString.toString());
 		}
 
-		fabriqueMessage.append("Le symbole " + symboleSuivant
-				+ " �tait inattendu");
+		message.append("Le symbole ").append(symboleSuivant).append(" était inattendu");
 
 		if (!premierSymbole) {
-			fabriqueMessage.append(" apr�s le symbole " + symboleCourant);
+			message.append(" après le symbole ").append(symboleCourant);
 		}
 
-		fabriqueMessage.append(" (ligne : " + ligne + ", colonne : " + colonne
-				+ ")." + SAUT_LIGNE + SAUT_LIGNE);
+		message.
+				append(" (ligne : ").append(ligne).
+				append(", colonne : ").append(colonne).append(").").append(SAUT_LIGNE).
+				append(SAUT_LIGNE);
 
-		fabriqueMessage.append("Un des symboles suivants �tait attendu : ");
+		message.append("Un des symboles suivants était attendu : ");
 
 		for (String symboleAttendu : listeSymbolesAttendus) {
-			fabriqueMessage.append(SAUT_LIGNE + "-   " + symboleAttendu);
+			message.append(SAUT_LIGNE).append("-   ").append(symboleAttendu);
 		}
 
-		return fabriqueMessage.toString();
-
+		return message.toString();
 	}
-
 }

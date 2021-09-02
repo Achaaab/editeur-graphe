@@ -7,13 +7,13 @@ package com.github.achaaab.utilitaire;
 public class ErreurUtilitaire {
 
 	/**
-	 * 
 	 * @param erreur
 	 * @return
+	 * @since 0.0.0
 	 */
 	public static Throwable getErreurInitiale(Throwable erreur) {
 
-		Throwable cause = erreur.getCause();
+		var cause = erreur.getCause();
 		Throwable erreurInitiale;
 
 		if (cause != null && cause != erreur) {
@@ -23,7 +23,5 @@ public class ErreurUtilitaire {
 		}
 
 		return erreurInitiale;
-
 	}
-
 }

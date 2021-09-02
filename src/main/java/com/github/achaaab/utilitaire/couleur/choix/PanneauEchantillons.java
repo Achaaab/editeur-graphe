@@ -1,11 +1,9 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.util.List;
-
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import java.awt.Dimension;
+
+import static javax.swing.BorderFactory.createTitledBorder;
 
 /**
  * @author Jonathan Guéhenneux
@@ -14,29 +12,20 @@ import javax.swing.JPanel;
 public class PanneauEchantillons extends JPanel {
 
 	/**
-	 * UID genere le 22/06/2010
-	 */
-	private static final long serialVersionUID = -5016390398072922840L;
-
-	/**
-	 * 
 	 * @param choixCouleur
+	 * @since 0.0.0
 	 */
 	public PanneauEchantillons(ChoixCouleur choixCouleur) {
 
 		setPreferredSize(new Dimension(192, 112));
 
-		setBorder(BorderFactory.createTitledBorder("�chantillons"));
+		setBorder(createTitledBorder("Échantillons"));
 
-		List<Color> echantillons = choixCouleur.getEchantillons();
-		int nombreEchantillons = echantillons.size();
+		var echantillons = choixCouleur.getEchantillons();
+		var nombreEchantillons = echantillons.size();
 
-		for (int indexEchantillon = 0; indexEchantillon < nombreEchantillons; indexEchantillon++) {
-
+		for (var indexEchantillon = 0; indexEchantillon < nombreEchantillons; indexEchantillon++) {
 			add(new PresentationEchantillon(choixCouleur, indexEchantillon));
-
 		}
-
 	}
-
 }

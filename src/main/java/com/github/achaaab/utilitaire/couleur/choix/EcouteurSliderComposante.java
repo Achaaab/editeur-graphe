@@ -9,24 +9,21 @@ import javax.swing.event.ChangeListener;
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class EcouteurSliderComposante implements ChangeListener {
-
-	private ChoixCouleur choixCouleur;
-
-	private JSlider slider;
-	private JSpinner spinner;
-
-	private int indexComposante;
+public record EcouteurSliderComposante(
+		ChoixCouleur choixCouleur,
+		JSlider slider,
+		JSpinner spinner,
+		int indexComposante)
+		implements ChangeListener {
 
 	/**
-	 * 
 	 * @param choixCouleur
 	 * @param slider
 	 * @param spinner
 	 * @param indexComposante
+	 * @øince 0.0.0
 	 */
-	public EcouteurSliderComposante(ChoixCouleur choixCouleur, JSlider slider,
-			JSpinner spinner, int indexComposante) {
+	public EcouteurSliderComposante(ChoixCouleur choixCouleur, JSlider slider, JSpinner spinner, int indexComposante) {
 
 		this.choixCouleur = choixCouleur;
 		this.slider = slider;
@@ -34,17 +31,14 @@ public class EcouteurSliderComposante implements ChangeListener {
 		this.indexComposante = indexComposante;
 
 		slider.addChangeListener(this);
-
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent evenement) {
 
-		int valeurComposante = slider.getValue();
+		var valeurComposante = slider.getValue();
 
 		spinner.setValue(valeurComposante);
 		choixCouleur.setComposante(indexComposante, valeurComposante);
-
 	}
-
 }

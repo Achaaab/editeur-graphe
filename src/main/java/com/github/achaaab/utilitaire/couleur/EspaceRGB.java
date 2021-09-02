@@ -8,24 +8,10 @@ import java.awt.Color;
  */
 public class EspaceRGB extends EspaceColorimetrique {
 
-	private static EspaceRGB instance;
+	public static EspaceRGB INSTANCE = new EspaceRGB();
 
 	/**
-	 * 
-	 * @return
-	 */
-	public static final synchronized EspaceRGB getInstance() {
-
-		if (instance == null) {
-			instance = new EspaceRGB();
-		}
-
-		return instance;
-
-	}
-
-	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private EspaceRGB() {
 		super("RGB", "Rouge", "Vert", "Bleu");
@@ -38,10 +24,6 @@ public class EspaceRGB extends EspaceColorimetrique {
 
 	@Override
 	public int[] getComposantes(Color couleur) {
-
-		return new int[] { couleur.getRed(), couleur.getGreen(),
-				couleur.getBlue() };
-
+		return new int[] { couleur.getRed(), couleur.getGreen(), couleur.getBlue() };
 	}
-
 }

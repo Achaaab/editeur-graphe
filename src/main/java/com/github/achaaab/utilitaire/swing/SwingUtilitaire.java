@@ -12,10 +12,11 @@ public class SwingUtilitaire {
 	/**
 	 * @param source
 	 * @return
+	 * @since 0.0.0
 	 */
 	public static BufferedImage copier(BufferedImage source) {
 
-		WritableRaster raster = source.copyData(null);
+		var raster = source.copyData(null);
 
 		return new BufferedImage(source.getColorModel(), raster, source.isAlphaPremultiplied(), null);
 	}

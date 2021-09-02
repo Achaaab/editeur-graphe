@@ -1,7 +1,10 @@
 package com.github.achaaab.utilitaire;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+
+import static com.github.achaaab.utilitaire.ErreurUtilitaire.getErreurInitiale;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * @author Jonathan Guéhenneux
@@ -10,39 +13,33 @@ import javax.swing.JOptionPane;
 public class GestionnaireException {
 
 	/**
-	 * 
 	 * @param erreur
+	 * @since 0.0.0
 	 */
 	public static void traiter(Throwable erreur) {
 
-		JFrame fenetreErreur = new JFrame();
+		var fenetreErreur = new JFrame();
 
-		String typeErreur = erreur.getClass().getSimpleName();
-		String messageErreur = erreur.getLocalizedMessage();
+		var typeErreur = erreur.getClass().getSimpleName();
+		var messageErreur = erreur.getLocalizedMessage();
 
-		StringBuilder message = new StringBuilder();
+		var message = new StringBuilder();
 
 		message.append(typeErreur);
-		message.append("\n\n" + messageErreur);
+		message.append("\n\n").append(messageErreur);
 
-		Throwable erreurInitiale = ErreurUtilitaire.getErreurInitiale(erreur);
+		var erreurInitiale = getErreurInitiale(erreur);
 
 		if (erreurInitiale != erreur) {
 
-			String typeErreurInitiale = erreurInitiale.getClass()
-					.getSimpleName();
-
-			String messageErreurInitiale = erreurInitiale.getLocalizedMessage();
+			var typeErreurInitiale = erreurInitiale.getClass().getSimpleName();
+			var messageErreurInitiale = erreurInitiale.getLocalizedMessage();
 
 			message.append("\nCause : ");
 			message.append(typeErreurInitiale);
-			message.append('(' + messageErreurInitiale + ')');
-
+			message.append('(').append(messageErreurInitiale).append(')');
 		}
 
-		JOptionPane.showMessageDialog(fenetreErreur, message, "Erreur",
-				JOptionPane.ERROR_MESSAGE);
-
+		showMessageDialog(fenetreErreur, message, "Erreur", ERROR_MESSAGE);
 	}
-
 }

@@ -7,19 +7,22 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.WEST;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class LabelComposant extends JPanel {
 
-	private JLabel label;
-	private Component composant;
+	private final JLabel label;
+	private final Component composant;
 
 	/**
-	 * 
 	 * @param label
 	 * @param composant
+	 * @since 0.0.0
 	 */
 	public LabelComposant(String label, Component composant) {
 
@@ -28,33 +31,16 @@ public class LabelComposant extends JPanel {
 		this.label = new JLabel(label);
 		this.composant = composant;
 
-		add(this.label, BorderLayout.WEST);
-		add(composant, BorderLayout.CENTER);
-
+		add(this.label, WEST);
+		add(composant, CENTER);
 	}
 
 	/**
-	 * 
-	 * @param label
-	 */
-	public void setLabel(String label) {
-		this.label.setText(label);
-	}
-
-	/**
-	 * 
 	 * @param foreground
+	 * @since 0.0.0
 	 */
 	public void setForegroundLabel(Color foreground) {
 		label.setForeground(foreground);
-	}
-
-	/**
-	 * 
-	 * @param foreground
-	 */
-	public void setForegroundComposant(Color foreground) {
-		composant.setForeground(foreground);
 	}
 
 	@Override
@@ -67,7 +53,5 @@ public class LabelComposant extends JPanel {
 		if (composant != null) {
 			composant.setForeground(foreground);
 		}
-
 	}
-
 }

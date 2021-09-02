@@ -1,11 +1,10 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
 
 import javax.swing.JComboBox;
-
-import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Jonathan Guéhenneux
@@ -13,31 +12,26 @@ import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
  */
 public class EcouteurChangementEspaceColorimetrique implements ActionListener {
 
-	private ChoixCouleur choixCouleur;
-	private JComboBox combo;
+	private final ChoixCouleur choixCouleur;
+	private final JComboBox<EspaceColorimetrique> combo;
 
 	/**
 	 * @param choixCouleur
 	 * @param combo
+	 * @since 0.0.0
 	 */
-	public EcouteurChangementEspaceColorimetrique(ChoixCouleur choixCouleur,
-			JComboBox combo) {
+	public EcouteurChangementEspaceColorimetrique(ChoixCouleur choixCouleur, JComboBox<EspaceColorimetrique> combo) {
 
 		this.choixCouleur = choixCouleur;
 		this.combo = combo;
 
 		combo.addActionListener(this);
-
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent evenement) {
 
-		EspaceColorimetrique espaceColorimetrique = (EspaceColorimetrique) combo
-				.getSelectedItem();
-
+		var espaceColorimetrique = (EspaceColorimetrique) combo.getSelectedItem();
 		choixCouleur.setEspaceColorimetrique(espaceColorimetrique);
-
 	}
-
 }

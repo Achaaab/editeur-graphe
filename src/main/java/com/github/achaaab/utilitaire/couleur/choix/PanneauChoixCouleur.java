@@ -1,13 +1,13 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
+import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
+
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-
-import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
+import static javax.swing.BorderFactory.createTitledBorder;
 
 /**
  * @author Jonathan Guéhenneux
@@ -15,12 +15,7 @@ import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
  */
 public class PanneauChoixCouleur extends JPanel {
 
-	/**
-	 * UID genere le 17/06/2010
-	 */
-	private static final long serialVersionUID = 6273462181199802358L;
-
-	private ChoixCouleur choixCouleur;
+	private final ChoixCouleur choixCouleur;
 
 	private JPanel panneauChoixCouleur2Encadre;
 	private JPanel panneauChoixCouleur1Encadre;
@@ -39,6 +34,7 @@ public class PanneauChoixCouleur extends JPanel {
 
 	/**
 	 * @param choixCouleur
+	 * @since 0.0.0
 	 */
 	public PanneauChoixCouleur(ChoixCouleur choixCouleur) {
 
@@ -48,39 +44,28 @@ public class PanneauChoixCouleur extends JPanel {
 
 		creerComposants();
 		ajouterComposants();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
 		panneauComposantes = new PanneauComposantes(choixCouleur);
-
-		panneauChoixCouleur2 = new PanneauChoixCouleur2(choixCouleur,
-				panneauComposantes);
-
-		panneauChoixCouleur1 = new PanneauChoixCouleur1(choixCouleur,
-				panneauComposantes);
-
+		panneauChoixCouleur2 = new PanneauChoixCouleur2(choixCouleur, panneauComposantes);
+		panneauChoixCouleur1 = new PanneauChoixCouleur1(choixCouleur, panneauComposantes);
 		panneauEchantillons = new PanneauEchantillons(choixCouleur);
-
 		panneauApercuCouleur = new PanneauApercuCouleur(choixCouleur);
 		panneauParametres = new PanneauParametresChoixCouleur(choixCouleur);
 		panneauValidation = new PanneauValidationCouleur(choixCouleur);
 
-		EspaceColorimetrique espaceColorimetrique = choixCouleur
-				.getEspaceColorimetrique();
+		var espaceColorimetrique = choixCouleur.getEspaceColorimetrique();
 
-		String titreChoixCouleur2 = getTitreChoixCouleur2(espaceColorimetrique);
-		String titreChoixCouleur1 = getTitreChoixCouleur1(espaceColorimetrique);
+		var titreChoixCouleur2 = getTitreChoixCouleur2(espaceColorimetrique);
+		var titreChoixCouleur1 = getTitreChoixCouleur1(espaceColorimetrique);
 
-		bordPanneauChoixCouleur2 = BorderFactory
-				.createTitledBorder(titreChoixCouleur2);
-
-		bordPanneauChoixCouleur1 = BorderFactory
-				.createTitledBorder(titreChoixCouleur1);
+		bordPanneauChoixCouleur2 = createTitledBorder(titreChoixCouleur2);
+		bordPanneauChoixCouleur1 = createTitledBorder(titreChoixCouleur1);
 
 		panneauChoixCouleur2Encadre = new JPanel();
 		panneauChoixCouleur1Encadre = new JPanel();
@@ -88,22 +73,19 @@ public class PanneauChoixCouleur extends JPanel {
 
 		panneauChoixCouleur2Encadre.setBorder(bordPanneauChoixCouleur2);
 		panneauChoixCouleur1Encadre.setBorder(bordPanneauChoixCouleur1);
-
-		panneauApercuCouleurEncadre.setBorder(BorderFactory
-				.createTitledBorder("Aper�u"));
-
+		panneauApercuCouleurEncadre.setBorder(createTitledBorder("Aperçu"));
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		panneauChoixCouleur2Encadre.add(panneauChoixCouleur2);
 		panneauChoixCouleur1Encadre.add(panneauChoixCouleur1);
 		panneauApercuCouleurEncadre.add(panneauApercuCouleur);
 
-		GridBagConstraints contraintes = new GridBagConstraints();
+		var contraintes = new GridBagConstraints();
 
 		contraintes.gridx = 0;
 		contraintes.gridy = 0;
@@ -146,114 +128,100 @@ public class PanneauChoixCouleur extends JPanel {
 		contraintes.gridwidth = 2;
 		contraintes.gridheight = 1;
 		add(panneauValidation, contraintes);
-
 	}
 
 	/**
-	 * 
 	 * @param espaceColorimetrique
 	 * @return
+	 * @since 0.0.0
 	 */
-	private static final String getTitreChoixCouleur2(
-			EspaceColorimetrique espaceColorimetrique) {
+	private static String getTitreChoixCouleur2(EspaceColorimetrique espaceColorimetrique) {
 
-		String nomComposante0 = espaceColorimetrique.getNomComposante0();
-		String nomComposante1 = espaceColorimetrique.getNomComposante1();
+		var nomComposante0 = espaceColorimetrique.getNomComposante0();
+		var nomComposante1 = espaceColorimetrique.getNomComposante1();
 
 		return nomComposante0 + ", " + nomComposante1;
-
 	}
 
 	/**
-	 * 
 	 * @param espaceColorimetrique
 	 * @return
+	 * @since 0.0.0
 	 */
-	private static final String getTitreChoixCouleur1(
-			EspaceColorimetrique espaceColorimetrique) {
-
-		String nomComposante2 = espaceColorimetrique.getNomComposante2();
-
-		return nomComposante2;
-
+	private static String getTitreChoixCouleur1(EspaceColorimetrique espaceColorimetrique) {
+		return espaceColorimetrique.getNomComposante2();
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessiner() {
+	public void redessiner() {
 
 		redessinerPanneauChoixCouleur2();
 		redessinerPanneauChoixCouleur1();
 		redessinerPanneauApercuCouleur();
 
 		panneauComposantes.actualiserComposantes();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerCurseur1() {
+	public void redessinerCurseur1() {
 		panneauChoixCouleur1.redessinerCurseur();
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerPanneauChoixCouleur2() {
+	public void redessinerPanneauChoixCouleur2() {
 
 		panneauChoixCouleur2.setImageAJour(false);
 		panneauChoixCouleur2Encadre.repaint();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerCurseur2() {
+	public void redessinerCurseur2() {
 		panneauChoixCouleur2.redessinerCurseur();
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerPanneauChoixCouleur1() {
+	public void redessinerPanneauChoixCouleur1() {
 
 		panneauChoixCouleur1.setImageAJour(false);
 		panneauChoixCouleur1Encadre.repaint();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerPanneauApercuCouleur() {
+	public void redessinerPanneauApercuCouleur() {
 		panneauApercuCouleur.repaint();
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerPanneauEchantillons() {
+	public void redessinerPanneauEchantillons() {
 		panneauEchantillons.repaint();
 	}
 
 	/**
-	 * 
 	 * @param espaceColorimetrique
+	 * @since 0.0.0
 	 */
-	public final void actualiserEspaceColorimetrique(
-			EspaceColorimetrique espaceColorimetrique) {
+	public void actualiserEspaceColorimetrique(EspaceColorimetrique espaceColorimetrique) {
 
-		String titreChoixCouleur2 = getTitreChoixCouleur2(espaceColorimetrique);
-		String titreChoixCouleur1 = getTitreChoixCouleur1(espaceColorimetrique);
+		var titreChoixCouleur2 = getTitreChoixCouleur2(espaceColorimetrique);
+		var titreChoixCouleur1 = getTitreChoixCouleur1(espaceColorimetrique);
 
 		bordPanneauChoixCouleur2.setTitle(titreChoixCouleur2);
 		bordPanneauChoixCouleur1.setTitle(titreChoixCouleur1);
 
 		panneauComposantes.actualiserEspaceColorimetrique(espaceColorimetrique);
-
 	}
-
 }

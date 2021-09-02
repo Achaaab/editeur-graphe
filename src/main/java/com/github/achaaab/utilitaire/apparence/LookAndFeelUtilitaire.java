@@ -1,11 +1,10 @@
 package com.github.achaaab.utilitaire.apparence;
 
-import java.awt.Window;
-
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Window;
 
 /**
  * @author Jonathan Guéhenneux
@@ -17,13 +16,11 @@ public class LookAndFeelUtilitaire {
 	 * Tente d'appliquer un look and feel en le recherchant par son nom dans la
 	 * liste des look and feel installes. Actualise toutes les fenetres de
 	 * l'application.
-	 * 
+	 * <p>
 	 * Ne fait rien si le aucun des look and feel installes ne porte le nom
 	 * fourni.
-	 * 
-	 * 
-	 * @param nom
-	 *            nom du look and feel a appliquer
+	 *
+	 * @param nom nom du look and feel a appliquer
 	 * @throws UnsupportedLookAndFeelException
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
@@ -47,18 +44,14 @@ public class LookAndFeelUtilitaire {
 				String classeLnf = informationLnf.getClassName();
 				setLookAndFeelParClasse(classeLnf);
 				break;
-
 			}
-
 		}
-
 	}
 
 	/**
 	 * Applique un look and feel et actualise les fenetres.
-	 * 
-	 * @param classe
-	 *            classe du look and feel a appliquer
+	 *
+	 * @param classe classe du look and feel a appliquer
 	 * @throws UnsupportedLookAndFeelException
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException

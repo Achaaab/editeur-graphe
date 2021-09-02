@@ -1,12 +1,14 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
-import java.awt.Color;
+import com.github.achaaab.utilitaire.swing.PanneauTampon;
+
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.github.achaaab.utilitaire.couleur.CouleurUtilitaire;
-import com.github.achaaab.utilitaire.swing.PanneauTampon;
+import static com.github.achaaab.utilitaire.couleur.CouleurUtilitaire.getNiveauGris;
+import static java.awt.Color.BLACK;
+import static java.awt.Color.WHITE;
 
 /**
  * @author Jonathan Guéhenneux
@@ -14,26 +16,19 @@ import com.github.achaaab.utilitaire.swing.PanneauTampon;
  */
 public class PanneauChoixCouleur1 extends PanneauTampon {
 
-	/**
-	 * UID genere le 17/06/2010
-	 */
-	private static final long serialVersionUID = -809159999299787860L;
-
 	private static final int LARGEUR = 32;
 	private static final int HAUTEUR = 256;
-	
-	private ChoixCouleur choixCouleur;
 
-	private BufferedImage palette;
-	private Graphics2D graphiquePalette;
+	private final ChoixCouleur choixCouleur;
+	private final BufferedImage palette;
+	private final Graphics2D graphiquePalette;
 
 	/**
-	 * 
 	 * @param choixCouleur
 	 * @param panneauComposantes
+	 * @since 0.0.0
 	 */
-	public PanneauChoixCouleur1(ChoixCouleur choixCouleur,
-			PanneauComposantes panneauComposantes) {
+	public PanneauChoixCouleur1(ChoixCouleur choixCouleur, PanneauComposantes panneauComposantes) {
 
 		super(false);
 
@@ -46,74 +41,65 @@ public class PanneauChoixCouleur1 extends PanneauTampon {
 
 		creerImage(LARGEUR, HAUTEUR);
 
-		EcouteurChoixCouleur1 ecouteur = new EcouteurChoixCouleur1(
-				choixCouleur, panneauComposantes);
+		var ecouteur = new EcouteurChoixCouleur1(choixCouleur, panneauComposantes);
 
 		addMouseListener(ecouteur);
 		addMouseMotionListener(ecouteur);
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerCurseur() {
+	public void redessinerCurseur() {
 
 		dessinerPalette();
 		dessinerCurseur();
 		repaint();
-
 	}
 
 	/**
 	 * recalcule la palette de couleurs
+	 *
+	 * @since 0.0.0
 	 */
-	private final void calculerPalette() {
+	private void calculerPalette() {
 
-		Color couleur;
+		for (var y = 0; y < hauteur; y++) {
 
-		int y;
-
-		for (y = 0; y < hauteur; y++) {
-
-			couleur = choixCouleur.getCouleur(y);
+			var couleur = choixCouleur.getCouleur(y);
 			graphiquePalette.setColor(couleur);
 			graphiquePalette.drawLine(0, y, LARGEUR, y);
-
 		}
-
 	}
 
 	/**
 	 * colle la palette dans le panneau sans la recalculer
+	 *
+	 * @since 0.0.0
 	 */
-	private final void dessinerPalette() {
+	private void dessinerPalette() {
 		graphique.drawImage(palette, 0, 0, null);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void dessinerCurseur() {
+	private void dessinerCurseur() {
 
-		int y = choixCouleur.getComposante2();
+		var y = choixCouleur.getComposante2();
 
-		Color couleur = choixCouleur.getCouleur();
-		int rgb = couleur.getRGB();
-		int niveauGris = CouleurUtilitaire.getNiveauGris(rgb);
-		graphique.setColor(niveauGris < 128 ? Color.WHITE : Color.BLACK);
-
+		var couleur = choixCouleur.getCouleur();
+		var rgb = couleur.getRGB();
+		var niveauGris = getNiveauGris(rgb);
+		graphique.setColor(niveauGris < 128 ? WHITE : BLACK);
 		graphique.drawLine(0, y, largeur, y);
-
 	}
 
 	@Override
-	public final void dessiner() {
+	public void dessiner() {
 
 		calculerPalette();
 		dessinerPalette();
 		dessinerCurseur();
-
 	}
-
 }

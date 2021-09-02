@@ -1,14 +1,18 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
-import java.awt.Color;
+import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
+import com.github.achaaab.utilitaire.swing.LabelComposant;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
-import com.github.achaaab.utilitaire.swing.LabelComposant;
+import static com.github.achaaab.utilitaire.couleur.choix.ChoixCouleur.ESPACES_COLOMETRIQUES;
+import static java.awt.Color.BLUE;
+import static javax.swing.BorderFactory.createCompoundBorder;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.BoxLayout.PAGE_AXIS;
 
 /**
  * @author Jonathan Guéhenneux
@@ -16,75 +20,57 @@ import com.github.achaaab.utilitaire.swing.LabelComposant;
  */
 public class PanneauParametresChoixCouleur extends JPanel {
 
-	/**
-	 * UID genere le 18/06/2010
-	 */
-	private static final long serialVersionUID = 4169063118579845523L;
+	private static final String TITRE = "Paramètres";
+	private static final String LIBELLE_ESPACE_COLORIMETRIQUE = "Espace colorimétrique : ";
 
-	private static final String TITRE = "Param�tres";
+	private final ChoixCouleur choixCouleur;
 
-	private static final String LIBELLE_ESPACE_COLORIMETRIQUE = "Espace colorim�trique : ";
-
-	private ChoixCouleur choixCouleur;
-
-	private JComboBox espaceColorimetrique;
+	private JComboBox<EspaceColorimetrique> espaceColorimetrique;
 	private LabelComposant panneauEspaceColorimetrique;
 
 	/**
 	 * @param choixCouleur
+	 * @since 0.0.0
 	 */
 	public PanneauParametresChoixCouleur(ChoixCouleur choixCouleur) {
 
 		this.choixCouleur = choixCouleur;
 
-		Border bordInterne = BorderFactory.createEmptyBorder(8, 8, 8, 8);
-		Border bordExterne = BorderFactory.createTitledBorder(TITRE);
-
-		Border bord = BorderFactory.createCompoundBorder(bordExterne,
-				bordInterne);
+		var bordInterne = createEmptyBorder(8, 8, 8, 8);
+		var bordExterne = createTitledBorder(TITRE);
+		var bord = createCompoundBorder(bordExterne, bordInterne);
 
 		setBorder(bord);
 
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new BoxLayout(this, PAGE_AXIS));
 
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteurs();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
-		espaceColorimetrique = new JComboBox(ChoixCouleur.ESPACES_COLOMETRIQUES);
-
-		panneauEspaceColorimetrique = new LabelComposant(
-				LIBELLE_ESPACE_COLORIMETRIQUE, espaceColorimetrique);
-
-		panneauEspaceColorimetrique.setForegroundLabel(Color.BLUE);
-
-		espaceColorimetrique.setSelectedItem(choixCouleur
-				.getEspaceColorimetrique());
-
+		espaceColorimetrique = new JComboBox<>(ESPACES_COLOMETRIQUES);
+		panneauEspaceColorimetrique = new LabelComposant(LIBELLE_ESPACE_COLORIMETRIQUE, espaceColorimetrique);
+		panneauEspaceColorimetrique.setForegroundLabel(BLUE);
+		espaceColorimetrique.setSelectedItem(choixCouleur.getEspaceColorimetrique());
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 		add(panneauEspaceColorimetrique);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void ajouterEcouteurs() {
-
-		new EcouteurChangementEspaceColorimetrique(choixCouleur,
-				espaceColorimetrique);
-
+	private void ajouterEcouteurs() {
+		new EcouteurChangementEspaceColorimetrique(choixCouleur, espaceColorimetrique);
 	}
-
 }

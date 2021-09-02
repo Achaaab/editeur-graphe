@@ -8,29 +8,14 @@ import java.awt.event.MouseMotionListener;
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class EcouteurChoixCouleur2 implements MouseListener,
-		MouseMotionListener {
-
-	private ChoixCouleur choixCouleur;
-
-	private PanneauComposantes panneauComposantes;
+public record EcouteurChoixCouleur2(
+		ChoixCouleur choixCouleur,
+		PanneauComposantes panneauComposantes)
+		implements MouseListener, MouseMotionListener {
 
 	/**
-	 * 
-	 * @param choixCouleur
-	 * @param panneauComposantes
-	 */
-	public EcouteurChoixCouleur2(ChoixCouleur choixCouleur,
-			PanneauComposantes panneauComposantes) {
-
-		this.choixCouleur = choixCouleur;
-		this.panneauComposantes = panneauComposantes;
-
-	}
-
-	/**
-	 * 
 	 * @param evenement
+	 * @since 0.0.0
 	 */
 	private void actualiserChoixCouleur(MouseEvent evenement) {
 
@@ -39,7 +24,6 @@ public class EcouteurChoixCouleur2 implements MouseListener,
 
 		choixCouleur.setComposantes01(composante0, composante1);
 		panneauComposantes.setComposantes01(composante0, composante1);
-
 	}
 
 	@Override
@@ -76,5 +60,4 @@ public class EcouteurChoixCouleur2 implements MouseListener,
 	public void mouseMoved(MouseEvent evenement) {
 
 	}
-
 }

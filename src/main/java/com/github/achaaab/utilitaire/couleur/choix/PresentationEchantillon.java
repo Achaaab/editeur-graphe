@@ -15,25 +15,19 @@ import javax.swing.JButton;
  */
 public class PresentationEchantillon extends JButton {
 
-	/**
-	 * UID genere le 22/06/2010
-	 */
-	private static final long serialVersionUID = -9158547950323175912L;
-
 	private static final int LARGEUR_ECHANTILLON = 15;
 	private static final int HAUTEUR_ECHANTILLON = 15;
 
-	private ChoixCouleur choixCouleur;
-	private List<Color> echantillons;
-	private int indexEchantillon;
+	private final ChoixCouleur choixCouleur;
+	private final List<Color> echantillons;
+	private final int indexEchantillon;
 
 	/**
-	 * 
 	 * @param choixCouleur
 	 * @param indexEchantillon
+	 * @since 0.0.0
 	 */
-	public PresentationEchantillon(ChoixCouleur choixCouleur,
-			int indexEchantillon) {
+	public PresentationEchantillon(ChoixCouleur choixCouleur, int indexEchantillon) {
 
 		this.choixCouleur = choixCouleur;
 		this.indexEchantillon = indexEchantillon;
@@ -42,37 +36,24 @@ public class PresentationEchantillon extends JButton {
 
 		setPreferredSize(new Dimension(LARGEUR_ECHANTILLON, HAUTEUR_ECHANTILLON));
 
-		addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-				appliquerEchantillon();
-			}
-
-		});
-
+		addActionListener(evenement -> appliquerEchantillon());
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void appliquerEchantillon() {
+	private void appliquerEchantillon() {
 
-		Color echantillon = echantillons.get(indexEchantillon);
+		var echantillon = echantillons.get(indexEchantillon);
 		choixCouleur.setCouleur(echantillon);
-
 	}
 
 	@Override
-	public final void paint(Graphics graphique) {
+	public void paint(Graphics graphique) {
 
-		Color echantillon = echantillons.get(indexEchantillon);
+		var echantillon = echantillons.get(indexEchantillon);
 
 		graphique.setColor(echantillon);
-
-		graphique.fill3DRect(0, 0, LARGEUR_ECHANTILLON, HAUTEUR_ECHANTILLON,
-				true);
-
+		graphique.fill3DRect(0, 0, LARGEUR_ECHANTILLON, HAUTEUR_ECHANTILLON, true);
 	}
-
 }

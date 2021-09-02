@@ -9,16 +9,10 @@ import javax.swing.SpinnerNumberModel;
 public class ModeleSpinnerComposante extends SpinnerNumberModel {
 
 	/**
-	 * UID genere le 21/06/2010
-	 */
-	private static final long serialVersionUID = 5559329146908740329L;
-
-	/**
-	 * 
 	 * @param composante
+	 * @øince 0.0.0
 	 */
 	public ModeleSpinnerComposante(int composante) {
 		super(composante, 0, 255, 1);
 	}
-
 }

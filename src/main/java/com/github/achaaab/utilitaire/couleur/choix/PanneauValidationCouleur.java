@@ -1,8 +1,5 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -12,12 +9,7 @@ import javax.swing.JPanel;
  */
 public class PanneauValidationCouleur extends JPanel {
 
-	/**
-	 * UID genere le 22/06/2010
-	 */
-	private static final long serialVersionUID = -5334489417480545112L;
-
-	private ChoixCouleur choixCouleur;
+	private final ChoixCouleur choixCouleur;
 
 	private JButton memoriser;
 	private JButton valider;
@@ -25,6 +17,7 @@ public class PanneauValidationCouleur extends JPanel {
 
 	/**
 	 * @param choixCouleur
+	 * @since 0.0.0
 	 */
 	public PanneauValidationCouleur(ChoixCouleur choixCouleur) {
 
@@ -33,63 +26,35 @@ public class PanneauValidationCouleur extends JPanel {
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteur();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void creerComposants() {
+	private void creerComposants() {
 
-		memoriser = new JButton("M�moriser");
+		memoriser = new JButton("Mémoriser");
 		valider = new JButton("Valider");
 		annuler = new JButton("Annuler");
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void ajouterComposants() {
+	private void ajouterComposants() {
 
 		add(memoriser);
 		add(valider);
 		add(annuler);
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void ajouterEcouteur() {
+	private void ajouterEcouteur() {
 
-		memoriser.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-				choixCouleur.memoriserEchantillon();
-			}
-
-		});
-
-		valider.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-				choixCouleur.valider();
-			}
-
-		});
-
-		annuler.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evenement) {
-				choixCouleur.annuler();
-			}
-
-		});
-
+		memoriser.addActionListener(evenement -> choixCouleur.memoriserEchantillon());
+		valider.addActionListener(evenement -> choixCouleur.valider());
+		annuler.addActionListener(evenement -> choixCouleur.annuler());
 	}
-
 }

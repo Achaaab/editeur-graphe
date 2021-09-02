@@ -2,17 +2,18 @@ package com.github.achaaab.utilitaire.couleur.choix;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Frame;
 import java.util.LinkedList;
 import java.util.Vector;
 
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 import com.github.achaaab.utilitaire.couleur.EspaceColorimetrique;
 import com.github.achaaab.utilitaire.couleur.EspaceHSV;
 import com.github.achaaab.utilitaire.couleur.EspaceRGB;
 import com.github.achaaab.utilitaire.mathematiques.MathematiquesUtilitaire;
+
+import static java.awt.Color.WHITE;
+import static javax.swing.JOptionPane.getFrameForComponent;
 
 /**
  * @author Jonathan Guéhenneux
@@ -21,79 +22,70 @@ import com.github.achaaab.utilitaire.mathematiques.MathematiquesUtilitaire;
 public class ChoixCouleur {
 
 	public static final Vector<EspaceColorimetrique> ESPACES_COLOMETRIQUES;
-
 	private static final int NOMBRE_ECHANTILLONS = 24;
 
 	static {
 
-		ESPACES_COLOMETRIQUES = new Vector<EspaceColorimetrique>();
+		ESPACES_COLOMETRIQUES = new Vector<>();
 
-		ESPACES_COLOMETRIQUES.add(EspaceRGB.getInstance());
-		ESPACES_COLOMETRIQUES.add(EspaceHSV.getInstance());
-
+		ESPACES_COLOMETRIQUES.add(EspaceRGB.INSTANCE);
+		ESPACES_COLOMETRIQUES.add(EspaceHSV.INSTANCE);
 	}
 
+	private final PanneauChoixCouleur presentation;
+
 	private int[] composantes;
-
 	private EspaceColorimetrique espaceColorimetrique;
-
-	private PanneauChoixCouleur presentation;
 	private JDialog dialogue;
 	private boolean validation;
-
 	private LinkedList<Color> echantillons;
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public ChoixCouleur() {
 
-		espaceColorimetrique = EspaceHSV.getInstance();
+		espaceColorimetrique = EspaceHSV.INSTANCE;
 		composantes = new int[3];
 
 		initialiserEchantillons();
 
 		presentation = new PanneauChoixCouleur(this);
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void initialiserEchantillons() {
+	private void initialiserEchantillons() {
 
-		echantillons = new LinkedList<Color>();
+		echantillons = new LinkedList<>();
 
-		for (int indexEchantillon = 0; indexEchantillon < NOMBRE_ECHANTILLONS; indexEchantillon++) {
-			echantillons.offer(Color.WHITE);
+		for (var indexEchantillon = 0; indexEchantillon < NOMBRE_ECHANTILLONS; indexEchantillon++) {
+			echantillons.offer(WHITE);
 		}
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void memoriserEchantillon() {
+	public void memoriserEchantillon() {
 
 		echantillons.poll();
 		echantillons.offer(getCouleur());
 
 		presentation.redessinerPanneauEchantillons();
-
 	}
 
 	/**
-	 * 
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public final Color ouvrirDialogue(Component composant, Color couleurInitiale)
-			throws InterruptedException {
+	public Color ouvrirDialogue(Component composant, Color couleurInitiale) throws InterruptedException {
 
 		setCouleur(couleurInitiale);
 		validation = false;
 
-		Frame fenetreMere = JOptionPane.getFrameForComponent(composant);
+		var fenetreMere = getFrameForComponent(composant);
 		dialogue = new JDialog(fenetreMere, "Choix d'une couleur", true);
 		dialogue.setContentPane(presentation);
 		dialogue.pack();
@@ -101,24 +93,22 @@ public class ChoixCouleur {
 		dialogue.setVisible(true);
 
 		return validation ? getCouleur() : couleurInitiale;
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public synchronized final void valider() {
+	public synchronized void valider() {
 
 		validation = true;
 		memoriserEchantillon();
 		dialogue.dispose();
-
 	}
 
 	/**
 	 * 
 	 */
-	public final void annuler() {
+	public void annuler() {
 		dialogue.dispose();
 	}
 

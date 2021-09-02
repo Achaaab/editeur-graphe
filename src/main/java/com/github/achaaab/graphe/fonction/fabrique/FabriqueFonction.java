@@ -19,6 +19,11 @@ import com.github.achaaab.utilitaire.StringUtilitaire;
 import com.github.achaaab.utilitaire.introspection.ExceptionIntrospection;
 import com.github.achaaab.utilitaire.introspection.IntrospectionUtilitaire;
 
+import static com.github.achaaab.utilitaire.StringUtilitaire.premiereLettreMajuscule;
+import static com.github.achaaab.utilitaire.introspection.IntrospectionUtilitaire.creerInstance;
+import static java.lang.Class.forName;
+import static java.util.Arrays.fill;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
@@ -119,69 +124,50 @@ public class FabriqueFonction {
 	}
 
 	/**
-	 * 
 	 * @param nomFonction
 	 * @param sousFonctions
-	 * @throws ClassNotFoundException
-	 * @throws ExceptionIntrospection
 	 */
-	public Fonction creerFonction(String nomFonction,
-			List<Fonction> sousFonctions) {
+	public Fonction creerFonction(String nomFonction, List<Fonction> sousFonctions) {
 
 		Fonction fonction;
 
 		try {
 
-			String nomClasse = StringUtilitaire
-					.premiereLettreMajuscule(nomFonction);
-			Class<?> classe = Class
-					.forName(PACKAGE_FONCTIONS + '.' + nomClasse);
+			String nomClasse = premiereLettreMajuscule(nomFonction);
+			Class<?> classe = forName(PACKAGE_FONCTIONS + '.' + nomClasse);
 
 			int arite = sousFonctions.size();
 			Fonction[] tableauSousFonctions = new Fonction[arite];
 			sousFonctions.toArray(tableauSousFonctions);
 			Class<?>[] typesParametres = new Class<?>[arite];
-			Arrays.fill(typesParametres, Fonction.class);
+			fill(typesParametres, Fonction.class);
 
-			fonction = (Fonction) IntrospectionUtilitaire.creerInstance(classe,
-					typesParametres, tableauSousFonctions);
+			fonction = (Fonction) creerInstance(classe, typesParametres, tableauSousFonctions);
 
 		} catch (Exception cause) {
 
-			RuntimeException exception = new RuntimeException(cause);
-			throw exception;
-
+			throw new RuntimeException(cause);
 		}
 
 		return fonction;
-
 	}
 
 	/**
-	 * compile une fonction a partir de son texte, renvoit les erreurs de
-	 * syntaxe
+	 * Compile une fonction à partir de son texte, renvoie les erreurs de syntaxe.
 	 * 
-	 * @param texteFonction
-	 *            texte de la fonction
-	 * @return la fonction compilee
-	 * @throws ErreurSyntaxe
-	 *             en cas d'erreur de syntaxe (symboles manquants ou inatendus)
+	 * @param texteFonction texte de la fonction
+	 * @return fonction compilée
+	 * @throws ErreurSyntaxe en cas d'erreur de syntaxe (symboles manquants ou inatendus)
+	 * @since 0.0.0
 	 */
 	public Fonction creerFonction(String texteFonction) throws ErreurSyntaxe {
 
-		CompilateurFonction compilateur = new CompilateurFonction(
-				new StringReader(texteFonction));
-
-		Fonction fonction;
+		var compilateur = new CompilateurFonction(new StringReader(texteFonction));
 
 		try {
-			fonction = compilateur.compilerFonction();
+			return compilateur.compilerFonction();
 		} catch (ParseException cause) {
 			throw new ErreurSyntaxe(cause);
 		}
-
-		return fonction;
-
 	}
-
 }

@@ -12,6 +12,7 @@ public class Rafrachissement extends TimerTask {
 
 	/**
 	 * @param panneau
+	 * @since 0.0.0
 	 */
 	public Rafrachissement(PanneauTampon panneau) {
 		this.panneau = panneau;

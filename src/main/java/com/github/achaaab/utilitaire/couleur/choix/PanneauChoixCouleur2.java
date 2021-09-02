@@ -1,11 +1,14 @@
 package com.github.achaaab.utilitaire.couleur.choix;
 
-import java.awt.Color;
+import com.github.achaaab.utilitaire.swing.PanneauTampon;
+
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import com.github.achaaab.utilitaire.couleur.CouleurUtilitaire;
-import com.github.achaaab.utilitaire.swing.PanneauTampon;
+import static com.github.achaaab.utilitaire.couleur.CouleurUtilitaire.getNiveauGris;
+import static java.awt.Color.BLACK;
+import static java.awt.Color.WHITE;
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 
 /**
  * @author Jonathan Guéhenneux
@@ -13,27 +16,19 @@ import com.github.achaaab.utilitaire.swing.PanneauTampon;
  */
 public class PanneauChoixCouleur2 extends PanneauTampon {
 
-	/**
-	 * UID genere le 17/06/2010
-	 */
-	private static final long serialVersionUID = -1788983648421272377L;
-
 	private static final int LARGEUR = 256;
 	private static final int HAUTEUR = 256;
-
 	private static final int TAILLE_CURSEUR = 8;
 
-	private ChoixCouleur choixCouleur;
-
-	private BufferedImage palette;
+	private final ChoixCouleur choixCouleur;
+	private final BufferedImage palette;
 
 	/**
-	 * 
 	 * @param choixCouleur
 	 * @param panneauComposantes
+	 * @since 0.0.0
 	 */
-	public PanneauChoixCouleur2(ChoixCouleur choixCouleur,
-			PanneauComposantes panneauComposantes) {
+	public PanneauChoixCouleur2(ChoixCouleur choixCouleur, PanneauComposantes panneauComposantes) {
 
 		super(false);
 
@@ -41,86 +36,73 @@ public class PanneauChoixCouleur2 extends PanneauTampon {
 
 		setPreferredSize(new Dimension(LARGEUR, HAUTEUR));
 
-		palette = new BufferedImage(LARGEUR, HAUTEUR,
-				BufferedImage.TYPE_INT_RGB);
+		palette = new BufferedImage(LARGEUR, HAUTEUR, TYPE_INT_RGB);
 
 		creerImage(LARGEUR, HAUTEUR);
 
-		EcouteurChoixCouleur2 ecouteur = new EcouteurChoixCouleur2(
-				choixCouleur, panneauComposantes);
+		var ecouteur = new EcouteurChoixCouleur2(choixCouleur, panneauComposantes);
 
 		addMouseListener(ecouteur);
 		addMouseMotionListener(ecouteur);
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void redessinerCurseur() {
+	public void redessinerCurseur() {
 
 		dessinerPalette();
 		dessinerCurseur();
 		repaint();
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void calculerPalette() {
+	private void calculerPalette() {
 
-		Color couleur;
+		for (var x = 0; x < largeur; x++) {
 
-		int x, y;
+			for (var y = 0; y < hauteur; y++) {
 
-		for (x = 0; x < largeur; x++) {
-
-			for (y = 0; y < hauteur; y++) {
-
-				couleur = choixCouleur.getCouleur(x, y);
+				var couleur = choixCouleur.getCouleur(x, y);
 				palette.setRGB(x, y, couleur.getRGB());
-
 			}
-
 		}
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void dessinerPalette() {
+	private void dessinerPalette() {
 		graphique.drawImage(palette, 0, 0, null);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void dessinerCurseur() {
+	private void dessinerCurseur() {
 
-		int x = choixCouleur.getComposante0();
-		int y = choixCouleur.getComposante1();
+		var x = choixCouleur.getComposante0();
+		var y = choixCouleur.getComposante1();
 
-		Color couleur = choixCouleur.getCouleur();
-		int rgb = couleur.getRGB();
-		int niveauGris = CouleurUtilitaire.getNiveauGris(rgb);
-		graphique.setColor(niveauGris < 128 ? Color.WHITE : Color.BLACK);
+		var couleur = choixCouleur.getCouleur();
+		var rgb = couleur.getRGB();
+		var niveauGris = getNiveauGris(rgb);
+
+		graphique.setColor(niveauGris < 128 ? WHITE : BLACK);
 
 		graphique.drawLine(x, y - 1, x, y - TAILLE_CURSEUR);
 		graphique.drawLine(x + 1, y, x + TAILLE_CURSEUR, y);
 		graphique.drawLine(x, y + 1, x, y + TAILLE_CURSEUR);
 		graphique.drawLine(x - 1, y, x - TAILLE_CURSEUR, y);
-
 	}
 
 	@Override
-	public final void dessiner() {
+	public void dessiner() {
 
 		calculerPalette();
 		dessinerPalette();
 		dessinerCurseur();
-
 	}
-
 }

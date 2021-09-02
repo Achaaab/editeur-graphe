@@ -3,13 +3,13 @@ package com.github.achaaab.utilitaire;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.System.nanoTime;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class Chronometre {
-
-	private static Chronometre instanceDefaut;
 
 	public static final int MILLISECONDES_PAR_SECONDE = 1000;
 	public static final int MICROSECONDES_PAR_SECONDE = MILLISECONDES_PAR_SECONDE * 1000;
@@ -18,59 +18,43 @@ public class Chronometre {
 	private final Map<String, Long> temps;
 
 	/**
-	 * @return l'instance par defaut
-	 */
-	public static synchronized Chronometre getInstanceDefaut() {
-
-		if (instanceDefaut == null) {
-			instanceDefaut = new Chronometre();
-		}
-
-		return instanceDefaut;
-
-	}
-
-	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public Chronometre() {
-		temps = new HashMap<String, Long>();
+		temps = new HashMap<>();
 	}
 
 	/**
 	 * @param cle
+	 * @since 0.0.0
 	 */
 	public void start(String cle) {
-
-		long t = System.nanoTime();
-		temps.put(cle, t);
-
+		temps.put(cle, nanoTime());
 	}
 
 	/**
 	 * @param cle
 	 * @return
+	 * @since 0.0.0
 	 */
 	public float tick(String cle) {
 
-		long t1 = temps.get(cle);
-		long t2 = System.nanoTime();
-		float t = Float.valueOf(t2 - t1);
-		float secondes = t / NANOSECONDES_PAR_SECONDE;
-		return secondes;
+		var t1 = temps.get(cle);
+		var t2 = nanoTime();
+		var t = (float) (t2 - t1);
 
+		return t / NANOSECONDES_PAR_SECONDE;
 	}
 
 	/**
 	 * @param cle
 	 * @return
+	 * @since 0.0.0
 	 */
 	public float stop(String cle) {
 
-		float secondes = tick(cle);
+		var secondes = tick(cle);
 		temps.remove(cle);
 		return secondes;
-
 	}
-
 }

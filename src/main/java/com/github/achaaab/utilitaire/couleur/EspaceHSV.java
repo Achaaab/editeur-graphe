@@ -2,68 +2,54 @@ package com.github.achaaab.utilitaire.couleur;
 
 import java.awt.Color;
 
+import static java.awt.Color.RGBtoHSB;
+import static java.awt.Color.getHSBColor;
+import static java.lang.Math.round;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class EspaceHSV extends EspaceColorimetrique {
 
-	private static EspaceHSV instance;
+	public static final EspaceHSV INSTANCE = new EspaceHSV();
 
 	/**
-	 * 
-	 * @return
-	 */
-	public static final synchronized EspaceHSV getInstance() {
-
-		if (instance == null) {
-			instance = new EspaceHSV();
-		}
-
-		return instance;
-
-	}
-
-	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private EspaceHSV() {
 		super("HSV", "Teinte", "Saturation", "Valeur");
 	}
 
 	@Override
-	public final Color getCouleur(int composante0, int composante1,
-			int composante2) {
+	public Color getCouleur(int composante0, int composante1, int composante2) {
 
-		float teinte = composante0 / 255f;
-		float saturation = composante1 / 255f;
-		float valeur = composante2 / 255f;
+		var teinte = composante0 / 255f;
+		var saturation = composante1 / 255f;
+		var valeur = composante2 / 255f;
 
-		return Color.getHSBColor(teinte, saturation, valeur);
-
+		return getHSBColor(teinte, saturation, valeur);
 	}
 
 	@Override
-	public final int[] getComposantes(Color couleur) {
+	public int[] getComposantes(Color couleur) {
 
-		float[] hsv = new float[3];
+		var hsv = new float[3];
 
-		int r = couleur.getRed();
-		int g = couleur.getGreen();
-		int b = couleur.getBlue();
+		var r = couleur.getRed();
+		var g = couleur.getGreen();
+		var b = couleur.getBlue();
 
-		Color.RGBtoHSB(r, g, b, hsv);
+		RGBtoHSB(r, g, b, hsv);
 
-		float h = hsv[0];
-		float s = hsv[1];
-		float v = hsv[2];
+		var h = hsv[0];
+		var s = hsv[1];
+		var v = hsv[2];
 
-		int teinte = Math.round(255 * h);
-		int saturation = Math.round(255 * s);
-		int valeur = Math.round(255 * v);
+		var teinte = round(255 * h);
+		var saturation = round(255 * s);
+		var valeur = round(255 * v);
 
 		return new int[] { teinte, saturation, valeur };
-
 	}
-
 }

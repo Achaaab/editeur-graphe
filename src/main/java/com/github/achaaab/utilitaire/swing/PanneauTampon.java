@@ -1,14 +1,16 @@
 package com.github.achaaab.utilitaire.swing;
 
+import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 
-import javax.swing.JPanel;
-
-import com.github.achaaab.utilitaire.Chronometre;
+import static com.github.achaaab.utilitaire.Chronometre.MILLISECONDES_PAR_SECONDE;
+import static java.awt.RenderingHints.KEY_ANTIALIASING;
+import static java.awt.RenderingHints.VALUE_ANTIALIAS_OFF;
+import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
+import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 
 /**
  * @author Jonathan Guéhenneux
@@ -17,6 +19,8 @@ import com.github.achaaab.utilitaire.Chronometre;
 public abstract class PanneauTampon extends JPanel {
 
 	private static final Timer TIMER_RAFRAICHISSEMENT = new Timer();
+
+	private final boolean anticrenelage;
 
 	protected int xImage;
 	protected int yImage;
@@ -31,18 +35,16 @@ public abstract class PanneauTampon extends JPanel {
 	private Rafrachissement rafraichissement;
 	private int rps;
 
-	private boolean anticrenelage;
-
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public PanneauTampon() {
 		this(true);
 	}
 
 	/**
-	 * 
 	 * @param anticrenelage
+	 * @since 0.0.0
 	 */
 	public PanneauTampon(boolean anticrenelage) {
 
@@ -52,27 +54,24 @@ public abstract class PanneauTampon extends JPanel {
 		yImage = 0;
 
 		imageAJour = false;
-
 	}
 
 	@Override
-	public final void paint(Graphics g) {
+	public void paint(Graphics graphics) {
 
-		int largeurPanneau = getWidth();
-		int hauteurPanneau = getHeight();
+		var largeurPanneau = getWidth();
+		var hauteurPanneau = getHeight();
 
-		if (image == null || largeurPanneau != largeur
-				|| hauteurPanneau != hauteur) {
+		if (image == null || largeurPanneau != largeur || hauteurPanneau != hauteur) {
 
 			creerImage(largeurPanneau, hauteurPanneau);
 			imageAJour = false;
-
 		}
 
 		if (imageAJour) {
 
-			g.setColor(getBackground());
-			g.fillRect(0, 0, largeurPanneau, hauteurPanneau);
+			graphics.setColor(getBackground());
+			graphics.fillRect(0, 0, largeurPanneau, hauteurPanneau);
 
 		} else {
 
@@ -82,120 +81,99 @@ public abstract class PanneauTampon extends JPanel {
 			dessiner();
 
 			imageAJour = true;
-
 		}
 
-		g.drawImage(image, xImage, yImage, null);
-
+		graphics.drawImage(image, xImage, yImage, null);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void recalculerImage() {
+	public void recalculerImage() {
 
 		imageAJour = false;
 		repaint();
-
 	}
 
 	/**
-	 * 
 	 * @param largeur
 	 * @param hauteur
+	 * @since 0.0.0
 	 */
-	public final void creerImage(int largeur, int hauteur) {
+	public void creerImage(int largeur, int hauteur) {
 
 		this.largeur = largeur;
 		this.hauteur = hauteur;
 
-		image = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_INT_ARGB);
-
+		image = new BufferedImage(largeur, hauteur, TYPE_INT_ARGB);
 		graphique = image.createGraphics();
-
-		graphique.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				anticrenelage ? RenderingHints.VALUE_ANTIALIAS_ON
-						: RenderingHints.VALUE_ANTIALIAS_OFF);
-
+		graphique.setRenderingHint(KEY_ANTIALIASING, anticrenelage ? VALUE_ANTIALIAS_ON : VALUE_ANTIALIAS_OFF);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public abstract void dessiner();
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void reprendreRafraichissementAutomatique() {
+	public void reprendreRafraichissementAutomatique() {
 		rafraichirAutomatiquement(rps);
 	}
 
 	/**
-	 * 
-	 * @param rps
-	 *            nombre de rafraichissements par seconde
+	 * @param rps nombre de rafraichissements par seconde
+	 * @since 0.0.0
 	 */
-	public final void rafraichirAutomatiquement(int rps) {
+	public void rafraichirAutomatiquement(int rps) {
 
 		this.rps = rps;
 
 		interrompreRafraichissementAutomatique();
-
 		rafraichissement = new Rafrachissement(this);
-
-		TIMER_RAFRAICHISSEMENT.schedule(rafraichissement, 0,
-				Chronometre.MILLISECONDES_PAR_SECONDE / rps);
-
+		TIMER_RAFRAICHISSEMENT.schedule(rafraichissement, 0, MILLISECONDES_PAR_SECONDE / rps);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void interrompreRafraichissementAutomatique() {
+	public void interrompreRafraichissementAutomatique() {
 
 		if (rafraichissement != null) {
 			rafraichissement.cancel();
 		}
-
 	}
 
 	/**
-	 * @return the rps
+	 * @return
+	 * @since 0.0.0
 	 */
-	public final int getRps() {
+	public int getRps() {
 		return rps;
 	}
 
 	/**
-	 * 
 	 * @return
+	 * @since 0.0.0
 	 */
-	public final BufferedImage getImage() {
+	public BufferedImage getImage() {
 		return image;
 	}
 
 	/**
-	 * 
 	 * @return
+	 * @since 0.0.0
 	 */
-	public final Graphics2D getGraphique() {
+	public Graphics2D getGraphique() {
 		return graphique;
 	}
 
 	/**
-	 * @return the imageAJour
-	 */
-	public final boolean isImageAJour() {
-		return imageAJour;
-	}
-
-	/**
 	 * @param imageAJour
-	 *            the imageAJour to set
+	 * @since 0.0.0
 	 */
-	public final void setImageAJour(boolean imageAJour) {
+	public void setImageAJour(boolean imageAJour) {
 		this.imageAJour = imageAJour;
 	}
-
 }
