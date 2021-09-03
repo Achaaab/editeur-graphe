@@ -7,8 +7,8 @@ package com.github.achaaab.graphe.fonction;
 public class Opposition extends FonctionParametree {
 
 	/**
-	 * 
 	 * @param sousFonction
+	 * @since 0.0.0
 	 */
 	public Opposition(Fonction sousFonction) {
 		super(sousFonction);
@@ -20,8 +20,7 @@ public class Opposition extends FonctionParametree {
 	}
 
 	@Override
-	public String getTexte() {
-		return "-" + sousFonctions[0].getTexte();
+	public String toString() {
+		return "-" + sousFonctions[0];
 	}
-
 }

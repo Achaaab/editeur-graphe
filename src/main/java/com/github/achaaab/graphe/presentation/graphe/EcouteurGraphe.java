@@ -1,14 +1,13 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
-import com.github.achaaab.utilitaire.swing.SwingUtilitaire;
-
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
+import static com.github.achaaab.utilitaire.swing.SwingUtilitaire.copier;
+import static java.awt.Color.BLACK;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -30,6 +29,7 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 
 	/**
 	 * @param panneauGraphe
+	 * @since 0.0.0
 	 */
 	public EcouteurGraphe(PanneauGraphe panneauGraphe) {
 
@@ -63,7 +63,7 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 		x1 = x0;
 		y1 = y0;
 
-		imageSansCadre = SwingUtilitaire.copier(panneauGraphe.getImage());
+		imageSansCadre = copier(panneauGraphe.getImage());
 		graphique = panneauGraphe.getGraphique();
 
 		dessinerCadreGrossissement(x0, y0, x1, y1);
@@ -104,12 +104,13 @@ public class EcouteurGraphe implements MouseListener, MouseMotionListener {
 	 * @param y0
 	 * @param x1
 	 * @param y1
+	 * @since 0.0.0
 	 */
 	private void dessinerCadreGrossissement(int x0, int y0, int x1, int y1) {
 
 		graphique.drawImage(imageSansCadre, 0, 0, null);
 
-		graphique.setColor(Color.BLACK);
+		graphique.setColor(BLACK);
 
 		int xMinCadre = min(x0, x1);
 		int yMinCadre = min(y0, y1);

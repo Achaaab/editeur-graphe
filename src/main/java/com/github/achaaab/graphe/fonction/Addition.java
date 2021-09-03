@@ -7,11 +7,12 @@ package com.github.achaaab.graphe.fonction;
 public class Addition extends FonctionParametree {
 
 	/**
-	 * @param sousFonction0
-	 * @param sousFonction1
+	 * @param gauche
+	 * @param droite
+	 * @since 0.0.0
 	 */
-	public Addition(Fonction sousFonction0, Fonction sousFonction1) {
-		super(sousFonction0, sousFonction1);
+	public Addition(Fonction gauche, Fonction droite) {
+		super(gauche, droite);
 	}
 
 	@Override
@@ -20,7 +21,7 @@ public class Addition extends FonctionParametree {
 	}
 
 	@Override
-	public String getTexte() {
-		return sousFonctions[0].getTexte() + " + " + sousFonctions[1].getTexte();
+	public String toString() {
+		return sousFonctions[0] + " + " + sousFonctions[1];
 	}
 }

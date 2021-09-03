@@ -9,11 +9,7 @@ public interface Fonction {
 	/**
 	 * @param x
 	 * @return
+	 * @since 0.0.0
 	 */
 	double evaluer(double x);
-
-	/**
-	 * @return
-	 */
-	String getTexte();
 }

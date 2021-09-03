@@ -1,10 +1,8 @@
 package com.github.achaaab.graphe.courbe;
 
-import com.github.achaaab.graphe.equation.Equation;
 import com.github.achaaab.graphe.equation.EquationCartesienne;
 import com.github.achaaab.graphe.presentation.courbe.PanneauCourbeCartesienne;
 
-import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 
 /**
@@ -13,17 +11,23 @@ import java.awt.geom.GeneralPath;
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class CourbeCartesienne extends CourbeAbstraite {
+public class CourbeCartesienne extends CourbeAbstraite<EquationCartesienne> {
 
-	private EquationCartesienne equation;
+	/**
+	 * @since 0.0.0
+	 */
+	public CourbeCartesienne() {
+		this(NOM_COURBE_DEFAUT, new EquationCartesienne());
+	}
 
 	/**
 	 * @param nom
 	 * @param equation
+	 * @since 0.0.0
 	 */
 	public CourbeCartesienne(String nom, EquationCartesienne equation) {
 
-		super(nom);
+		super(nom, equation);
 
 		this.equation = equation;
 
@@ -31,72 +35,19 @@ public class CourbeCartesienne extends CourbeAbstraite {
 	}
 
 	@Override
-	public Shape getForme() {
+	protected void ajouterPoint(GeneralPath forme, double x) {
 
-		GeneralPath forme = new GeneralPath();
+		var y = equation.getY(x);
 
-		double x;
-
-		for (x = min; x + pas < max; x += pas) {
-
-			if (interpolee) {
-				ajouterSegment(forme, x, x + pas);
-			} else {
-				ajouterPoint(forme, x);
-			}
-
-		}
-
-		if (interpolee) {
-			ajouterSegment(forme, x, max);
-		} else {
-			ajouterPoint(forme, max);
-		}
-
-		return forme;
-
-	}
-
-	/**
-	 * @param forme
-	 * @param x
-	 */
-	private void ajouterPoint(GeneralPath forme, double x) {
-
-		double y = equation.getY(x);
-
-		ajouterSegment(forme, x, y, x, y);
-
-	}
-
-	/**
-	 * @param forme
-	 * @param x0
-	 * @param x1
-	 */
-	private void ajouterSegment(GeneralPath forme, double x0, double x1) {
-
-		double y0 = equation.getY(x0);
-		double y1 = equation.getY(x1);
-
-		ajouterSegment(forme, x0, y0, x1, y1);
-
+		Courbe.ajouterSegment(forme, x, y, x, y);
 	}
 
 	@Override
-	public Equation getEquation() {
-		return equation;
-	}
+	protected void ajouterSegment(GeneralPath forme, double x0, double x1) {
 
-	/**
-	 * @return l'equation cartesienne de la courbe
-	 */
-	public EquationCartesienne getEquationCartesienne() {
-		return equation;
-	}
+		var y0 = equation.getY(x0);
+		var y1 = equation.getY(x1);
 
-	@Override
-	public TypeCourbe getType() {
-		return TypeCourbe.CARTESIENNE;
+		Courbe.ajouterSegment(forme, x0, y0, x1, y1);
 	}
 }

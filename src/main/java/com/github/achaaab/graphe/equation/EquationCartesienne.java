@@ -1,33 +1,51 @@
 package com.github.achaaab.graphe.equation;
 
+import com.github.achaaab.graphe.fonction.Constante;
 import com.github.achaaab.graphe.fonction.Fonction;
 
 /**
- * equation du type y = f(x)
- * 
+ * équation du type {@code y = f(x)}
+ *
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
 public class EquationCartesienne implements Equation {
 
+	public static final String TYPE = "Cartésienne";
+
 	private Fonction f;
 
 	/**
-	 * @param f
+	 * @since 0.0.0
 	 */
-	public EquationCartesienne(Fonction f) {
-		this.f = f;
+	public EquationCartesienne() {
+		this(new Constante(0));
 	}
 
 	/**
-	 * @return the f
+	 * @param fonction
+	 * @since 0.0.0
+	 */
+	public EquationCartesienne(Fonction fonction) {
+		this.f = fonction;
+	}
+
+	@Override
+	public String getType() {
+		return TYPE;
+	}
+
+	/**
+	 * @return
+	 * @since 0.0.0
 	 */
 	public Fonction getF() {
 		return f;
 	}
 
 	/**
-	 * @param f the f to set
+	 * @param f
+	 * @since 0.0.0
 	 */
 	public void setF(Fonction f) {
 		this.f = f;
@@ -36,8 +54,9 @@ public class EquationCartesienne implements Equation {
 	/**
 	 * @param x
 	 * @return
+	 * @since 0.0.0
 	 */
-	public final double getY(double x) {
+	public double getY(double x) {
 		return f.evaluer(x);
 	}
 }

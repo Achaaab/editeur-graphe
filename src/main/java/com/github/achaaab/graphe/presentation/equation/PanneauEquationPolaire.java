@@ -1,7 +1,6 @@
 package com.github.achaaab.graphe.presentation.equation;
 
 import com.github.achaaab.graphe.equation.EquationPolaire;
-import com.github.achaaab.graphe.fonction.Fonction;
 import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
 import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
 
@@ -12,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+import static java.awt.GridBagConstraints.BOTH;
 
 /**
  * @author Jonathan Guéhenneux
@@ -19,13 +19,14 @@ import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
  */
 public class PanneauEquationPolaire extends PanneauEquation {
 
+	private final EquationPolaire equationPolaire;
+
 	private JLabel labelF;
 	private JTextField champF;
 
-	private final EquationPolaire equationPolaire;
-
 	/**
 	 * @param equationPolaire
+	 * @since 0.0.0
 	 */
 	public PanneauEquationPolaire(EquationPolaire equationPolaire) {
 
@@ -39,24 +40,24 @@ public class PanneauEquationPolaire extends PanneauEquation {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
 		labelF = new JLabel("r = f(t) = ");
 
-		Fonction f = equationPolaire.getF();
+		var f = equationPolaire.getF();
 
 		champF = new JTextField(50);
-		champF.setText(f.getTexte());
+		champF.setText(f.toString());
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void ajouterComposants() {
 
-		GridBagConstraints contraintes = new GridBagConstraints();
+		var contraintes = new GridBagConstraints();
 		contraintes.insets = new Insets(2, 2, 2, 2);
 
 		contraintes.gridx = 0;
@@ -64,6 +65,8 @@ public class PanneauEquationPolaire extends PanneauEquation {
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
 		add(labelF, contraintes);
+
+		contraintes.fill = BOTH;
 
 		contraintes.gridx = 1;
 		contraintes.gridy = 0;
@@ -73,7 +76,7 @@ public class PanneauEquationPolaire extends PanneauEquation {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void ajouterEcouteurs() {
 
@@ -81,16 +84,15 @@ public class PanneauEquationPolaire extends PanneauEquation {
 
 			try {
 
-				String texteF = champF.getText();
-
-				Fonction f = FabriqueFonction.getInstance().creerFonction(texteF);
+				var texteF = champF.getText();
+				var f = FabriqueFonction.INSTANCE.creerFonction(texteF);
 
 				equationPolaire.setF(f);
 				graphe.actualiserGraphe();
 
-			} catch (ErreurSyntaxe erreurSyntaxe) {
+			} catch (Throwable erreur) {
 
-				traiter(erreurSyntaxe);
+				traiter(erreur);
 			}
 		});
 	}

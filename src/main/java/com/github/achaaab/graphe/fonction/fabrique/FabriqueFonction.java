@@ -1,9 +1,5 @@
 package com.github.achaaab.graphe.fonction.fabrique;
 
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.List;
-
 import com.github.achaaab.graphe.fonction.Addition;
 import com.github.achaaab.graphe.fonction.Constante;
 import com.github.achaaab.graphe.fonction.Division;
@@ -12,17 +8,15 @@ import com.github.achaaab.graphe.fonction.Identite;
 import com.github.achaaab.graphe.fonction.Multiplication;
 import com.github.achaaab.graphe.fonction.Opposition;
 import com.github.achaaab.graphe.fonction.Soustraction;
+import com.github.achaaab.graphe.fonction.catalogue.Sin;
 import com.github.achaaab.graphe.grammaire.CompilateurFonction;
 import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
 import com.github.achaaab.graphe.grammaire.ParseException;
-import com.github.achaaab.utilitaire.StringUtilitaire;
-import com.github.achaaab.utilitaire.introspection.ExceptionIntrospection;
-import com.github.achaaab.utilitaire.introspection.IntrospectionUtilitaire;
 
-import static com.github.achaaab.utilitaire.StringUtilitaire.premiereLettreMajuscule;
-import static com.github.achaaab.utilitaire.introspection.IntrospectionUtilitaire.creerInstance;
-import static java.lang.Class.forName;
-import static java.util.Arrays.fill;
+import java.io.StringReader;
+import java.util.List;
+
+import static com.github.achaaab.graphe.fonction.catalogue.Catalogue.getFunction;
 
 /**
  * @author Jonathan Guéhenneux
@@ -30,131 +24,101 @@ import static java.util.Arrays.fill;
  */
 public class FabriqueFonction {
 
-	private static final String PACKAGE_FONCTIONS = "com.github.achaaab.graphe.fonction.dictionnaire";
+	public static final FabriqueFonction INSTANCE = new FabriqueFonction();
 
-	private static FabriqueFonction instance;
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static synchronized FabriqueFonction getInstance() {
-
-		if (instance == null) {
-			instance = new FabriqueFonction();
-		}
-
-		return instance;
-
-	}
+	private static final Package PACKAGE_CATALOGUE = Sin.class.getPackage();
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private FabriqueFonction() {
 
 	}
 
 	/**
-	 * 
-	 * @param sousFonction0
-	 * @param sousFonction1
+	 * @param gauche
+	 * @param droite
 	 * @return
+	 * @since 0.0.0
 	 */
-	public Fonction creerAddition(Fonction sousFonction0, Fonction sousFonction1) {
-		return new Addition(sousFonction0, sousFonction1);
+	public Fonction creerAddition(Fonction gauche, Fonction droite) {
+		return new Addition(gauche, droite);
 	}
 
 	/**
-	 * 
-	 * @param sousFonction0
-	 * @param sousFonction1
+	 * @param gauche
+	 * @param droite
 	 * @return
+	 * @since 0.0.0
 	 */
-	public Fonction creerSoustraction(Fonction sousFonction0, Fonction sousFonction1) {
-		return new Soustraction(sousFonction0, sousFonction1);
+	public Fonction creerSoustraction(Fonction gauche, Fonction droite) {
+		return new Soustraction(gauche, droite);
 	}
 
 	/**
-	 * 
-	 * @param sousFonction0
-	 * @param sousFonction1
+	 * @param gauche
+	 * @param droite
 	 * @return
+	 * @since 0.0.0
 	 */
-	public Fonction creerMultiplication(Fonction sousFonction0,
-			Fonction sousFonction1) {
-		return new Multiplication(sousFonction0, sousFonction1);
+	public Fonction creerMultiplication(Fonction gauche, Fonction droite) {
+		return new Multiplication(gauche, droite);
 	}
 
 	/**
-	 * 
-	 * @param sousFonction0
-	 * @param sousFonction1
+	 * @param gauche
+	 * @param droite
 	 * @return
+	 * @since 0.0.0
 	 */
-	public Fonction creerDivision(Fonction sousFonction0, Fonction sousFonction1) {
-		return new Division(sousFonction0, sousFonction1);
+	public Fonction creerDivision(Fonction gauche, Fonction droite) {
+		return new Division(gauche, droite);
 	}
 
 	/**
-	 * 
 	 * @param valeur
 	 * @return
+	 * @since 0.0.0
 	 */
 	public Fonction creerConstante(double valeur) {
 		return new Constante(valeur);
 	}
 
 	/**
-	 * 
 	 * @param nomVariable
 	 * @return
+	 * @since 0.0.0
 	 */
 	public Fonction creerIdentite(String nomVariable) {
 		return new Identite(nomVariable);
 	}
 
 	/**
-	 * 
 	 * @param sousFonction
 	 * @return
+	 * @since 0.0.0
 	 */
 	public Fonction creerOpposition(Fonction sousFonction) {
 		return new Opposition(sousFonction);
 	}
 
 	/**
-	 * @param nomFonction
+	 * @param nom
 	 * @param sousFonctions
+	 * @since 0.0.0
 	 */
-	public Fonction creerFonction(String nomFonction, List<Fonction> sousFonctions) {
-
-		Fonction fonction;
+	public Fonction creerFonction(String nom, List<Fonction> sousFonctions) {
 
 		try {
-
-			String nomClasse = premiereLettreMajuscule(nomFonction);
-			Class<?> classe = forName(PACKAGE_FONCTIONS + '.' + nomClasse);
-
-			int arite = sousFonctions.size();
-			Fonction[] tableauSousFonctions = new Fonction[arite];
-			sousFonctions.toArray(tableauSousFonctions);
-			Class<?>[] typesParametres = new Class<?>[arite];
-			fill(typesParametres, Fonction.class);
-
-			fonction = (Fonction) creerInstance(classe, typesParametres, tableauSousFonctions);
-
+			return getFunction(nom, sousFonctions);
 		} catch (Exception cause) {
-
 			throw new RuntimeException(cause);
 		}
-
-		return fonction;
 	}
 
 	/**
 	 * Compile une fonction à partir de son texte, renvoie les erreurs de syntaxe.
-	 * 
+	 *
 	 * @param texteFonction texte de la fonction
 	 * @return fonction compilée
 	 * @throws ErreurSyntaxe en cas d'erreur de syntaxe (symboles manquants ou inatendus)

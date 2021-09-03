@@ -10,7 +10,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,7 +17,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+import static java.awt.BorderLayout.CENTER;
 import static java.awt.Color.BLUE;
+import static java.awt.GridBagConstraints.BOTH;
+import static java.awt.GridBagConstraints.LINE_START;
+import static java.lang.Double.parseDouble;
 import static javax.swing.BorderFactory.createTitledBorder;
 
 /**
@@ -33,10 +37,10 @@ public abstract class PanneauCourbe extends JPanel {
 	private static final String TITRE_PARAMETRES_GENERAUX = "Paramètres généraux";
 	private static final String TITRE_DOMAINE = "Domaine";
 	private static final String TITRE_FONCTION = "Fonction";
-
 	private static final Color COULEUR_LABELS = BLUE;
-
 	private static final ChoixCouleur CHOIX_COULEUR_COURBE = new ChoixCouleur();
+
+	private final Courbe<?> courbe;
 
 	private JPanel panneauParametresGeneraux;
 	private JPanel panneauDomaine;
@@ -66,12 +70,12 @@ public abstract class PanneauCourbe extends JPanel {
 	protected PanneauEquation panneauEquation;
 
 	private Graphe graphe;
-	private final Courbe courbe;
 
 	/**
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public PanneauCourbe(Courbe courbe) {
+	public PanneauCourbe(Courbe<?> courbe) {
 
 		this.courbe = courbe;
 
@@ -83,31 +87,30 @@ public abstract class PanneauCourbe extends JPanel {
 
 		creerComposants();
 		ajouterEcouteurs();
-
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
-		// parametres generaux
+		// paramètres généraux
 
 		labelNom = new JLabel("Nom : ");
 		labelNom.setForeground(COULEUR_LABELS);
-		String nom = courbe.getNom();
+		var nom = courbe.getNom();
 		champNom = new JTextField(20);
 		champNom.setText(nom);
 
 		labelType = new JLabel("Type : ");
 		labelType.setForeground(COULEUR_LABELS);
-		String type = courbe.getType().toString();
+		var type = courbe.getType();
 		champType = new JLabel(type);
 
 		labelCouleur = new JLabel("Couleur : ");
 		labelCouleur.setForeground(COULEUR_LABELS);
 		champCouleur = new JButton();
-		Dimension tailleBouton = new Dimension(80, 20);
+		var tailleBouton = new Dimension(80, 20);
 		champCouleur.setPreferredSize(tailleBouton);
 		champCouleur.setMinimumSize(tailleBouton);
 
@@ -117,29 +120,27 @@ public abstract class PanneauCourbe extends JPanel {
 		panneauParametresGeneraux.setLayout(new GridBagLayout());
 		panneauParametresGeneraux.setBorder(createTitledBorder(TITRE_PARAMETRES_GENERAUX));
 
-		/*
-		 * domaine
-		 */
+		// domaine
 
-		double min = courbe.getMin();
+		var min = courbe.getMin();
 		labelMin = new JLabel("Minimum : ");
 		labelMin.setForeground(COULEUR_LABELS);
 		champMin = new JTextField(15);
 		champMin.setText(Double.toString(min));
 
-		double max = courbe.getMax();
+		var max = courbe.getMax();
 		labelMax = new JLabel("Maximum : ");
 		labelMax.setForeground(COULEUR_LABELS);
 		champMax = new JTextField(15);
 		champMax.setText(Double.toString(max));
 
-		double pas = courbe.getPas();
+		var pas = courbe.getPas();
 		labelPas = new JLabel("Pas : ");
 		labelPas.setForeground(COULEUR_LABELS);
 		champPas = new JTextField(10);
 		champPas.setText(Double.toString(pas));
 
-		boolean interpolee = courbe.isInterpolee();
+		var interpolee = courbe.isInterpolee();
 		labelInterpolee = new JLabel("Interpolation : ");
 		labelInterpolee.setForeground(COULEUR_LABELS);
 		champInterpolee = new JCheckBox();
@@ -149,29 +150,25 @@ public abstract class PanneauCourbe extends JPanel {
 		panneauDomaine.setLayout(new GridBagLayout());
 		panneauDomaine.setBorder(createTitledBorder(TITRE_DOMAINE));
 
-		/*
-		 * fonction
-		 */
+		// fonction
 
 		panneauFonctionEncadre = new JPanel();
 		panneauFonctionEncadre.setLayout(new BorderLayout());
-		Border bordurePanneauFonction = createTitledBorder(TITRE_FONCTION);
+		var bordurePanneauFonction = createTitledBorder(TITRE_FONCTION);
 		panneauFonctionEncadre.setBorder(bordurePanneauFonction);
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	protected void ajouterComposants() {
 
-		GridBagConstraints contraintes = new GridBagConstraints();
+		var contraintes = new GridBagConstraints();
 
-		contraintes.anchor = GridBagConstraints.LINE_START;
+		contraintes.anchor = LINE_START;
 		contraintes.insets = new Insets(2, 2, 2, 2);
 
-		/*
-		 * parametres generaux
-		 */
+		// paramètres généraux
 
 		contraintes.gridx = 0;
 		contraintes.gridy = 0;
@@ -209,9 +206,7 @@ public abstract class PanneauCourbe extends JPanel {
 		contraintes.gridheight = 1;
 		panneauParametresGeneraux.add(champCouleur, contraintes);
 
-		/*
-		 * domaine
-		 */
+		// domaine
 
 		contraintes.gridx = 0;
 		contraintes.gridy = 0;
@@ -261,15 +256,11 @@ public abstract class PanneauCourbe extends JPanel {
 		contraintes.gridheight = 1;
 		panneauDomaine.add(champInterpolee, contraintes);
 
-		/*
-		 * fonction
-		 */
+		// fonction
 
-		panneauFonctionEncadre.add(panneauEquation, BorderLayout.CENTER);
+		panneauFonctionEncadre.add(panneauEquation, CENTER);
 
-		/*
-		 * panneaux
-		 */
+		// panneaux
 
 		contraintes.gridx = 0;
 		contraintes.gridy = 0;
@@ -287,81 +278,77 @@ public abstract class PanneauCourbe extends JPanel {
 		contraintes.gridy = 1;
 		contraintes.gridwidth = 2;
 		contraintes.gridheight = 1;
-		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.fill = BOTH;
 		add(panneauFonctionEncadre, contraintes);
-
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void ajouterEcouteurs() {
 
 		champCouleur.addActionListener(evenement -> {
 
-			Color couleurCourbe = courbe.getCouleur();
+			var couleurCourbe = courbe.getCouleur();
 
 			try {
-
-				couleurCourbe = CHOIX_COULEUR_COURBE.ouvrirDialogue(
-						PanneauCourbe.this, couleurCourbe);
-
+				couleurCourbe = CHOIX_COULEUR_COURBE.ouvrirDialogue(PanneauCourbe.this, couleurCourbe);
 			} catch (InterruptedException erreur) {
-
+				traiter(erreur);
 			}
 
 			courbe.setCouleur(couleurCourbe);
 			graphe.actualiserGraphe();
-
 		});
 
 		champNom.addActionListener(evenement -> {
 
-			String nom = champNom.getText();
+			var nom = champNom.getText();
 			courbe.setNom(nom);
 			graphe.actualiserListeCourbes();
 		});
 
 		champMin.addActionListener(evenement -> {
 
-			double min = Double.parseDouble(champMin.getText());
+			var min = parseDouble(champMin.getText());
 			courbe.setMin(min);
 			graphe.actualiserGraphe();
 		});
 
 		champMax.addActionListener(evenement -> {
 
-			double max = Double.parseDouble(champMax.getText());
+			var max = parseDouble(champMax.getText());
 			courbe.setMax(max);
 			graphe.actualiserGraphe();
 		});
 
 		champPas.addActionListener(evenement -> {
 
-			double pas = Double.parseDouble(champPas.getText());
+			var pas = parseDouble(champPas.getText());
 			courbe.setPas(pas);
 			graphe.actualiserGraphe();
 		});
 
 		champInterpolee.addChangeListener(evenement -> {
 
-			boolean interpolee = champInterpolee.isSelected();
+			var interpolee = champInterpolee.isSelected();
 			courbe.setInterpolee(interpolee);
 			graphe.actualiserGraphe();
 		});
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public void actualiserCouleurCourbe() {
 
-		Color couleurCourbe = courbe.getCouleur();
+		var couleurCourbe = courbe.getCouleur();
 		champCouleur.setBackground(couleurCourbe);
 	}
 
 	/**
-	 * @param graphe the graphe to set
+	 * @param graphe
+	 * @since 0.0.0
 	 */
 	public void setGraphe(Graphe graphe) {
 

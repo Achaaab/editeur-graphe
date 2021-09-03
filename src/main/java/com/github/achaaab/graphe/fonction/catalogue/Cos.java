@@ -1,30 +1,31 @@
-package com.github.achaaab.graphe.fonction.dictionnaire;
+package com.github.achaaab.graphe.fonction.catalogue;
 
 import com.github.achaaab.graphe.fonction.Fonction;
 import com.github.achaaab.graphe.fonction.FonctionParametree;
+
+import static java.lang.Math.cos;
 
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class Sin extends FonctionParametree {
+public class Cos extends FonctionParametree {
 
 	/**
-	 * 
 	 * @param sousFonction
+	 * @since 0.0.0
 	 */
-	public Sin(Fonction sousFonction) {
+	public Cos(Fonction sousFonction) {
 		super(sousFonction);
 	}
 
 	@Override
 	public double evaluer() {
-		return Math.sin(parametres[0]);
+		return cos(parametres[0]);
 	}
 
 	@Override
-	public String getTexte() {
-		return "sin(" + getTexteSousFonctions() + ")";
+	public String toString() {
+		return "cos(" + getTexteSousFonctions() + ")";
 	}
-
 }

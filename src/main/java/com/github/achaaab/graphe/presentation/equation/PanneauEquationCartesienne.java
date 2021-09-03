@@ -3,8 +3,6 @@ package com.github.achaaab.graphe.presentation.equation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -13,9 +11,9 @@ import com.github.achaaab.graphe.equation.EquationCartesienne;
 import com.github.achaaab.graphe.fonction.Fonction;
 import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
 import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
-import com.github.achaaab.utilitaire.GestionnaireException;
 
 import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+import static java.awt.GridBagConstraints.BOTH;
 
 /**
  * @author Jonathan Guéhenneux
@@ -23,13 +21,14 @@ import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
  */
 public class PanneauEquationCartesienne extends PanneauEquation {
 
+	private final EquationCartesienne equationCartesienne;
+
 	private JLabel labelF;
 	private JTextField champF;
 
-	private EquationCartesienne equationCartesienne;
-
 	/**
 	 * @param equationCartesienne
+	 * @since 0.0.0
 	 */
 	public PanneauEquationCartesienne(EquationCartesienne equationCartesienne) {
 
@@ -43,25 +42,24 @@ public class PanneauEquationCartesienne extends PanneauEquation {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
 		labelF = new JLabel("y = f(x) = ");
 
-		Fonction f = equationCartesienne.getF();
+		var f = equationCartesienne.getF();
 
 		champF = new JTextField(50);
-		champF.setText(f.getTexte());
-
+		champF.setText(f.toString());
 	}
 
 	/**
-	 * 
+	 * @øince 0.0.0
 	 */
 	private void ajouterComposants() {
 
-		GridBagConstraints contraintes = new GridBagConstraints();
+		var contraintes = new GridBagConstraints();
 		contraintes.insets = new Insets(2, 2, 2, 2);
 		
 		contraintes.gridx = 0;
@@ -70,17 +68,17 @@ public class PanneauEquationCartesienne extends PanneauEquation {
 		contraintes.gridheight = 1;
 		add(labelF, contraintes);
 
+		contraintes.fill = BOTH;
+
 		contraintes.gridx = 1;
 		contraintes.gridy = 0;
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
-		contraintes.fill = GridBagConstraints.BOTH;
 		add(champF, contraintes);
-
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void ajouterEcouteurs() {
 
@@ -88,9 +86,9 @@ public class PanneauEquationCartesienne extends PanneauEquation {
 
 			try {
 
-				String texteF = champF.getText();
+				var texteF = champF.getText();
 
-				Fonction f = FabriqueFonction.getInstance().creerFonction(texteF);
+				var f = FabriqueFonction.INSTANCE.creerFonction(texteF);
 
 				equationCartesienne.setF(f);
 				graphe.actualiserGraphe();

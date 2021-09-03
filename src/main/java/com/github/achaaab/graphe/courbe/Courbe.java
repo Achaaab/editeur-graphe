@@ -5,6 +5,8 @@ import com.github.achaaab.graphe.presentation.courbe.PanneauCourbe;
 
 import java.awt.Color;
 import java.awt.Shape;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 
 /**
  * interface définissant une courbe
@@ -12,13 +14,31 @@ import java.awt.Shape;
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public interface Courbe {
+public interface Courbe<E extends Equation> {
+
+	/**
+	 * @param forme
+	 * @param x0
+	 * @param y0
+	 * @param x1
+	 * @param y1
+	 * @since 0.0.0
+	 */
+	static void ajouterSegment(GeneralPath forme, double x0, double y0, double x1, double y1) {
+		forme.append(new Line2D.Double(x0, y0, x1, y1), false);
+	}
+
+	/**
+	 * @return curve type
+	 * @since 0.0.0
+	 */
+	String getType();
 
 	/**
 	 * @return équation de la courbe
 	 * @since 0.0.0
 	 */
-	Equation getEquation();
+	E getEquation();
 
 	/**
 	 * @return couleur de la courbe
@@ -82,8 +102,8 @@ public interface Courbe {
 	void setInterpolee(boolean interpolee);
 
 	/**
-	 * @return true si la courbe est interpolée (un segment est tracé d'un point de la courbe au suivant),
-	 * false sinon
+	 * @return {@code true} si la courbe est interpolée (un segment est tracé d'un point de la courbe au suivant),
+	 * {@©ode false} sinon
 	 * @since 0.0.0
 	 */
 	boolean isInterpolee();
@@ -99,12 +119,6 @@ public interface Courbe {
 	 * @since 0.0.0
 	 */
 	void setNom(String nom);
-
-	/**
-	 * @return type de la courbe
-	 * @since 0.0.0
-	 */
-	TypeCourbe getType();
 
 	/**
 	 * @return présentation de la courbe (panneau de paramétrage)

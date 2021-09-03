@@ -1,14 +1,12 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
-import java.awt.Color;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.github.achaaab.utilitaire.swing.LabelComposant;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+
+import static java.awt.Color.DARK_GRAY;
 import static javax.swing.BorderFactory.createEmptyBorder;
 
 /**
@@ -21,7 +19,7 @@ public class PanneauCoordonnees extends JPanel {
 	private JLabel y;
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public PanneauCoordonnees() {
 
@@ -35,8 +33,8 @@ public class PanneauCoordonnees extends JPanel {
 		var panneauX = new LabelComposant("x = ", x);
 		var panneauY = new LabelComposant("y = ", y);
 
-		panneauX.setForeground(Color.DARK_GRAY);
-		panneauY.setForeground(Color.DARK_GRAY);
+		panneauX.setForeground(DARK_GRAY);
+		panneauY.setForeground(DARK_GRAY);
 
 		add(panneauX);
 		add(panneauY);
@@ -44,6 +42,7 @@ public class PanneauCoordonnees extends JPanel {
 
 	/**
 	 * @param x
+	 * @since 0.0.0
 	 */
 	public void setX(double x) {
 		this.x.setText(Double.toString(x));
@@ -51,6 +50,7 @@ public class PanneauCoordonnees extends JPanel {
 
 	/**
 	 * @param y
+	 * @since 0.0.0
 	 */
 	public void setY(double y) {
 		this.y.setText(Double.toString(y));

@@ -1,15 +1,17 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import com.github.achaaab.graphe.Graphe;
+import com.github.achaaab.graphe.courbe.Courbe;
+import com.github.achaaab.graphe.presentation.courbe.PanneauCourbes;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
-import com.github.achaaab.graphe.Graphe;
-import com.github.achaaab.graphe.courbe.Courbe;
-import com.github.achaaab.graphe.presentation.courbe.PanneauCourbes;
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.SOUTH;
 
 /**
  * @author Jonathan Guéhenneux
@@ -34,6 +36,7 @@ public class PresentationGraphe extends JSplitPane {
 
 	/**
 	 * @param graphe
+	 * @since 0.0.0
 	 */
 	public PresentationGraphe(Graphe graphe) {
 
@@ -49,11 +52,11 @@ public class PresentationGraphe extends JSplitPane {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
-		panneauHaut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		panneauHaut = new JSplitPane(HORIZONTAL_SPLIT);
 		panneauHaut.setOneTouchExpandable(true);
 		panneauHaut.setContinuousLayout(true);
 
@@ -76,12 +79,12 @@ public class PresentationGraphe extends JSplitPane {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void ajouterComposants() {
 
-		panneauGauche.add(panneauGrapheAscenseurs, BorderLayout.CENTER);
-		panneauGauche.add(panneauCoordonnees, BorderLayout.SOUTH);
+		panneauGauche.add(panneauGrapheAscenseurs, CENTER);
+		panneauGauche.add(panneauCoordonnees, SOUTH);
 
 		panneauHaut.setLeftComponent(panneauGauche);
 		panneauHaut.setRightComponent(panneauFenetreAscenseurs);
@@ -91,37 +94,37 @@ public class PresentationGraphe extends JSplitPane {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public void actualiserFenetre() {
 		panneauFenetre.actualiser();
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public void actualiserGraphe() {
 		panneauGraphe.recalculerImage();
 	}
 
 	/**
-	 * 
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public void ajouterCourbe(Courbe courbe) {
+	public void ajouterCourbe(Courbe<?> courbe) {
 		panneauCourbes.ajouterCourbe(courbe);
 	}
 
 	/**
-	 * 
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public void supprimerCourbe(Courbe courbe) {
+	public void supprimerCourbe(Courbe<?> courbe) {
 		panneauCourbes.supprimerCourbe(courbe);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public void actualiserListeCourbes() {
 		panneauCourbes.redessinerListeCourbes();

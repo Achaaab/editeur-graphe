@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 
+import static com.github.achaaab.utilitaire.swing.SwingUtilitaire.scale;
+
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
@@ -40,6 +42,7 @@ public class FenetreApplication extends JFrame {
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+		scale(this);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);

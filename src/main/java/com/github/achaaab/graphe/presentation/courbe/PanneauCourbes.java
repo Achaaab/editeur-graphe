@@ -1,21 +1,21 @@
 package com.github.achaaab.graphe.presentation.courbe;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
+import com.github.achaaab.graphe.Graphe;
+import com.github.achaaab.graphe.courbe.Courbe;
+import com.github.achaaab.utilitaire.swing.PanneauVariable;
+import com.github.achaaab.utilitaire.swing.SwingUtilitaire;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
-import com.github.achaaab.graphe.Graphe;
-import com.github.achaaab.graphe.courbe.Courbe;
-import com.github.achaaab.utilitaire.swing.PanneauVariable;
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.NORTH;
+import static java.awt.BorderLayout.SOUTH;
 
 /**
  * @author Jonathan Guéhenneux
@@ -27,7 +27,7 @@ public class PanneauCourbes extends PanneauVariable {
 
 	private final Graphe graphe;
 
-	private JComboBox<Courbe> presentationCourbes;
+	private JComboBox<Courbe<?>> presentationCourbes;
 	private JScrollPane panneauCourbeAscenseurs;
 
 	private JPanel panneauBoutons;
@@ -47,15 +47,17 @@ public class PanneauCourbes extends PanneauVariable {
 		creerComposants();
 		ajouterComposants();
 		ajouterEcouteurs();
+
+		initialiserListeCourbes();
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
 		presentationCourbes = new JComboBox<>();
-		presentationCourbes.setRenderer(RenduListeCourbes.getInstance());
+		presentationCourbes.setRenderer(RenduListeCourbes.INSTANCE);
 
 		panneauCourbeAscenseurs = new JScrollPane();
 		panneauCourbeAscenseurs.setPreferredSize(DIMENSION_DEFAUT);
@@ -66,40 +68,38 @@ public class PanneauCourbes extends PanneauVariable {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void ajouterComposants() {
 
-		add(presentationCourbes, BorderLayout.NORTH);
-
-		add(panneauCourbeAscenseurs, BorderLayout.CENTER);
+		add(presentationCourbes, NORTH);
+		add(panneauCourbeAscenseurs, CENTER);
 
 		panneauBoutons.add(ajouter);
 		panneauBoutons.add(supprimer);
-		add(panneauBoutons, BorderLayout.SOUTH);
+		add(panneauBoutons, SOUTH);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void ajouterEcouteurs() {
 
 		/*
-		 * lors de la selection d'une courbe dans la combo box, on supprime du
-		 * conteneur le panneau de la courbe precedemment selectionnee, et on
-		 * ajoute le nouveau
+		 * Lors de la sélection d'une courbe dans la liste,
+		 * on supprime du conteneur le panneau de la courbe précédemment sélectionnée
+		 * et on ajoute le nouveau.
 		 */
 
 		presentationCourbes.addActionListener(evenement -> actualiserPanneauCourbe());
 
 		ajouter.addActionListener(evenement -> {
 
-			PresentationNouvelleCourbe presentationNouvelleCourbe = new PresentationNouvelleCourbe(
-					PanneauCourbes.this);
+			var presentationNouvelleCourbe = new PresentationNouvelleCourbe(PanneauCourbes.this);
 
 			presentationNouvelleCourbe.setVisible(true);
 
-			Courbe courbe = presentationNouvelleCourbe.getCourbe();
+			var courbe = presentationNouvelleCourbe.getCourbe();
 
 			if (courbe != null) {
 
@@ -111,7 +111,7 @@ public class PanneauCourbes extends PanneauVariable {
 
 		supprimer.addActionListener(evenement -> {
 
-			Courbe courbe = (Courbe) presentationCourbes.getSelectedItem();
+			var courbe = presentationCourbes.getItemAt(presentationCourbes.getSelectedIndex());
 
 			if (courbe != null) {
 				graphe.supprimerCourbe(courbe);
@@ -120,16 +120,14 @@ public class PanneauCourbes extends PanneauVariable {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	public final void initialiserListeCourbes() {
+	public void initialiserListeCourbes() {
 
-		List<Courbe> listeCourbes = graphe.getCourbes();
-		int nombreCourbes = listeCourbes.size();
-		Courbe[] courbes = new Courbe[nombreCourbes];
-		listeCourbes.toArray(courbes);
+		var listeCourbes = graphe.getCourbes();
+		var courbes = listeCourbes.toArray(new Courbe[0]);
 
-		var modeleCourbes = new DefaultComboBoxModel<>(courbes);
+		var modeleCourbes = new DefaultComboBoxModel<Courbe<?>>(courbes);
 
 		presentationCourbes.setModel(modeleCourbes);
 
@@ -137,27 +135,27 @@ public class PanneauCourbes extends PanneauVariable {
 	}
 
 	/**
-	 * 
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public void ajouterCourbe(Courbe courbe) {
+	public void ajouterCourbe(Courbe<?> courbe) {
 		presentationCourbes.addItem(courbe);
 	}
 
 	/**
-	 * 
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public void supprimerCourbe(Courbe courbe) {
+	public void supprimerCourbe(Courbe<?> courbe) {
 		presentationCourbes.removeItem(courbe);
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public void actualiserPanneauCourbe() {
 
-		Courbe courbeSelectionnee = (Courbe) presentationCourbes.getSelectedItem();
+		var courbeSelectionnee = presentationCourbes.getItemAt(presentationCourbes.getSelectedIndex());
 
 		if (panneauCourbeAscenseurs != null) {
 			remove(panneauCourbeAscenseurs);
@@ -165,13 +163,13 @@ public class PanneauCourbes extends PanneauVariable {
 
 		if (courbeSelectionnee != null) {
 
-			PanneauCourbe panneauCourbe = courbeSelectionnee.getPresentation();
+			var panneauCourbe = courbeSelectionnee.getPresentation();
 			panneauCourbe.setGraphe(graphe);
 
 			panneauCourbeAscenseurs = new JScrollPane(panneauCourbe);
 			panneauCourbeAscenseurs.setPreferredSize(DIMENSION_DEFAUT);
 
-			add(panneauCourbeAscenseurs, BorderLayout.CENTER);
+			add(panneauCourbeAscenseurs, CENTER);
 		}
 
 		revalidate();
@@ -179,7 +177,7 @@ public class PanneauCourbes extends PanneauVariable {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	public void redessinerListeCourbes() {
 		presentationCourbes.repaint();

@@ -1,10 +1,13 @@
 package com.github.achaaab.utilitaire.apparence;
 
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.Window;
+
+import static java.awt.Window.getWindows;
+import static java.util.Arrays.stream;
+import static javax.swing.SwingUtilities.updateComponentTreeUI;
+import static javax.swing.UIManager.getInstalledLookAndFeels;
+import static javax.swing.UIManager.setLookAndFeel;
 
 /**
  * @author Jonathan Guéhenneux
@@ -13,65 +16,51 @@ import java.awt.Window;
 public class LookAndFeelUtilitaire {
 
 	/**
-	 * Tente d'appliquer un look and feel en le recherchant par son nom dans la
-	 * liste des look and feel installes. Actualise toutes les fenetres de
-	 * l'application.
-	 * <p>
-	 * Ne fait rien si le aucun des look and feel installes ne porte le nom
-	 * fourni.
+	 * Tente d'appliquer un look and feel en le recherchant par son nom dans la liste des look and feel installés.
+	 * Actualise toutes les fenêtres de l'application.
+	 * Ne fait rien si aucun des look and feel installés ne porte le nom fourni.
 	 *
-	 * @param nom nom du look and feel a appliquer
-	 * @throws UnsupportedLookAndFeelException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws ClassNotFoundException
+	 * @param nom nom du look and feel à appliquer
+	 * @throws RuntimeException si le look and feel n'a pas pu être appliqué, quelle qu'en soit la raison
+	 * @since 0.0.0
 	 */
-	public static void setLookAndFeelParNom(String nom)
-			throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException {
+	public static void setLookAndFeelParNom(String nom) {
 
-		LookAndFeelInfo[] informationsLnf = UIManager
-				.getInstalledLookAndFeels();
+		var themes = getInstalledLookAndFeels();
+		var themeTrouve = stream(themes).
+				filter(theme -> theme.getName().equals(nom)).
+				findFirst();
 
-		String nomLnf;
-
-		for (LookAndFeelInfo informationLnf : informationsLnf) {
-
-			nomLnf = informationLnf.getName();
-
-			if (nomLnf.equals(nom)) {
-
-				String classeLnf = informationLnf.getClassName();
-				setLookAndFeelParClasse(classeLnf);
-				break;
-			}
-		}
+		themeTrouve.
+				map(LookAndFeelInfo::getClassName).
+				ifPresent(LookAndFeelUtilitaire::setLookAndFeelParClasse);
 	}
 
 	/**
-	 * Applique un look and feel et actualise les fenetres.
+	 * Applique un look and feel et actualise les fenêtres existantes.
 	 *
-	 * @param classe classe du look and feel a appliquer
-	 * @throws UnsupportedLookAndFeelException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws ClassNotFoundException
+	 * @param classe classe du look and feel à appliquer
+	 * @throws RuntimeException si le look and feel n'a pas pu être appliqué, quelle qu'en soit la raison
+	 * @since 0.0.0
 	 */
-	public static void setLookAndFeelParClasse(String classe)
-			throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException {
+	public static void setLookAndFeelParClasse(String classe) {
 
-		UIManager.setLookAndFeel(classe);
+		try {
 
-		Window[] fenetres = Window.getWindows();
+			setLookAndFeel(classe);
 
-		for (Window fenetre : fenetres) {
+			var fenetres = getWindows();
 
-			SwingUtilities.updateComponentTreeUI(fenetre);
-			fenetre.pack();
+			for (var fenetre : fenetres) {
 
+				updateComponentTreeUI(fenetre);
+				fenetre.pack();
+			}
+
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+				UnsupportedLookAndFeelException cause) {
+
+			throw new RuntimeException(cause);
 		}
-
 	}
-
 }

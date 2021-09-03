@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import static java.awt.GridBagConstraints.LINE_START;
 import static java.lang.Double.parseDouble;
 import static javax.swing.BorderFactory.createCompoundBorder;
 import static javax.swing.BorderFactory.createEmptyBorder;
@@ -42,6 +43,7 @@ public class PanneauFenetre extends JPanel {
 
 	/**
 	 * @param graphe
+	 * @since 0.0.0
 	 */
 	public PanneauFenetre(Graphe graphe) {
 
@@ -61,7 +63,7 @@ public class PanneauFenetre extends JPanel {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
@@ -85,17 +87,17 @@ public class PanneauFenetre extends JPanel {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public void actualiser() {
 
-		double xMin = graphe.getXMin();
-		double xMax = graphe.getXMax();
-		double graduationX = graphe.getGraduationX();
+		var xMin = graphe.getXMin();
+		var xMax = graphe.getXMax();
+		var graduationX = graphe.getGraduationX();
 
-		double yMin = graphe.getYMin();
-		double yMax = graphe.getYMax();
-		double graduationY = graphe.getGraduationY();
+		var yMin = graphe.getYMin();
+		var yMax = graphe.getYMax();
+		var graduationY = graphe.getGraduationY();
 
 		champXMin.setText(Double.toString(xMin));
 		champXMax.setText(Double.toString(xMax));
@@ -107,12 +109,12 @@ public class PanneauFenetre extends JPanel {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void ajouterComposants() {
 
-		GridBagConstraints contraintes = new GridBagConstraints();
-		contraintes.anchor = GridBagConstraints.LINE_START;
+		var contraintes = new GridBagConstraints();
+		contraintes.anchor = LINE_START;
 
 		contraintes.gridx = 0;
 
@@ -157,48 +159,48 @@ public class PanneauFenetre extends JPanel {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	private void ajouterEcouteurs() {
 
 		champXMin.addActionListener(evenement -> {
 
-			double xMin = parseDouble(champXMin.getText());
+			var xMin = parseDouble(champXMin.getText());
 			graphe.setXMin(xMin);
 			graphe.actualiserGraphe();
 		});
 
 		champXMax.addActionListener(evenement -> {
 
-			double xMax = parseDouble(champXMax.getText());
+			var xMax = parseDouble(champXMax.getText());
 			graphe.setXMax(xMax);
 			graphe.actualiserGraphe();
 		});
 
 		champGraduationX.addActionListener(evenement -> {
 
-			double graduationX = parseDouble(champGraduationX.getText());
+			var graduationX = parseDouble(champGraduationX.getText());
 			graphe.setGraduationX(graduationX);
 			graphe.actualiserGraphe();
 		});
 
 		champYMin.addActionListener(evenement -> {
 
-			double yMin = parseDouble(champYMin.getText());
+			var yMin = parseDouble(champYMin.getText());
 			graphe.setYMin(yMin);
 			graphe.actualiserGraphe();
 		});
 
 		champYMax.addActionListener(evenement -> {
 
-			double yMax = parseDouble(champYMax.getText());
+			var yMax = parseDouble(champYMax.getText());
 			graphe.setYMax(yMax);
 			graphe.actualiserGraphe();
 		});
 
 		champGraduationY.addActionListener(evenement -> {
 
-			double graduationY = parseDouble(champGraduationY.getText());
+			var graduationY = parseDouble(champGraduationY.getText());
 			graphe.setGraduationY(graduationY);
 			graphe.actualiserGraphe();
 		});

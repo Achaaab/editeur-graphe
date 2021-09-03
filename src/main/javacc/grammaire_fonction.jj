@@ -10,11 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.achaaab.graphe.fonction.Fonction;
-import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
+import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;import static java.lang.Double.parseDouble;import static java.lang.Math.E;import static java.lang.Math.PI;
 
 public class CompilateurFonction {
-
-	private static final FabriqueFonction FABRIQUE_FONCTION = FabriqueFonction.getInstance();
 
 }
 
@@ -77,10 +75,10 @@ public Fonction fonctionAdditive():
 
 	(
 			<OPERATEUR_ADDITION> sousFonction1 = fonctionMultiplicative()
-			{ fonctionAdditive = FabriqueFonction.getInstance().creerAddition(fonctionAdditive, sousFonction1); }
+			{ fonctionAdditive = FabriqueFonction.INSTANCE.creerAddition(fonctionAdditive, sousFonction1); }
 
 		|	<OPERATEUR_SOUSTRACTION> sousFonction1 = fonctionMultiplicative()
-			{ fonctionAdditive = FabriqueFonction.getInstance().creerSoustraction(fonctionAdditive, sousFonction1); }
+			{ fonctionAdditive = FabriqueFonction.INSTANCE.creerSoustraction(fonctionAdditive, sousFonction1); }
 	)*
 
 	{ return fonctionAdditive; }
@@ -101,10 +99,10 @@ public Fonction fonctionMultiplicative():
 
 	(
 			<OPERATEUR_MULTIPLICATION> sousFonction1 = fonctionUnaire()
-			{ fonctionMultiplicative = FabriqueFonction.getInstance().creerMultiplication(fonctionMultiplicative, sousFonction1); }
+			{ fonctionMultiplicative = FabriqueFonction.INSTANCE.creerMultiplication(fonctionMultiplicative, sousFonction1); }
 		
 		|	<OPERATEUR_DIVISION> sousFonction1 = fonctionUnaire()
-			{ fonctionMultiplicative = FabriqueFonction.getInstance().creerDivision(fonctionMultiplicative, sousFonction1); }
+			{ fonctionMultiplicative = FabriqueFonction.INSTANCE.creerDivision(fonctionMultiplicative, sousFonction1); }
 
 	)*
 
@@ -122,7 +120,7 @@ public Fonction fonctionUnaire():
 {
 	(
 			<OPERATEUR_SOUSTRACTION> sousFonction = fonctionUnaire()
-			{ fonctionUnaire = FabriqueFonction.getInstance().creerOpposition(sousFonction); }
+			{ fonctionUnaire = FabriqueFonction.INSTANCE.creerOpposition(sousFonction); }
 
 		|	fonctionUnaire = fonctionPrimaire()
 	)
@@ -161,16 +159,16 @@ public Fonction constante():
 {
 	(
 			tokenValeur = <NOMBRE>
-			{ valeur = Double.parseDouble(tokenValeur.image); }
+			{ valeur = parseDouble(tokenValeur.image); }
 
 		|	<CONSTANTE_E>
-			{ valeur = Math.E; }
+			{ valeur = E; }
 
 		|	<CONSTANTE_PI>
-			{ valeur = Math.PI; }
+			{ valeur = PI; }
 	)
 
-	{ return FABRIQUE_FONCTION.creerConstante(valeur); }
+	{ return FabriqueFonction.INSTANCE.creerConstante(valeur); }
 }
 
 /**
@@ -185,7 +183,7 @@ public Fonction identite():
 }
 {
 	tokenVariable = <VARIABLE>
-	{ identite = FABRIQUE_FONCTION.creerIdentite(tokenVariable.image); }
+	{ identite = FabriqueFonction.INSTANCE.creerIdentite(tokenVariable.image); }
 	{ return identite; }
 }
 
@@ -223,7 +221,7 @@ public Fonction fonctionNommee():
 
 	<PARENTHESE_DROITE>
 
-	{ fonctionNommee = FABRIQUE_FONCTION.creerFonction(nomFonction, sousFonctions); }
+	{ fonctionNommee = FabriqueFonction.INSTANCE.creerFonction(nomFonction, sousFonctions); }
 
 	{ return fonctionNommee; }
 }

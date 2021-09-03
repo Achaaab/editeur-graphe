@@ -65,7 +65,7 @@ public class ErreurSyntaxe extends Exception {
 
 		message.append("Un des symboles suivants était attendu : ");
 
-		for (String symboleAttendu : listeSymbolesAttendus) {
+		for (var symboleAttendu : listeSymbolesAttendus) {
 			message.append(SAUT_LIGNE).append("-   ").append(symboleAttendu);
 		}
 

@@ -1,20 +1,20 @@
 package com.github.achaaab.graphe.presentation.equation;
 
-import javax.swing.JPanel;
-
 import com.github.achaaab.graphe.Graphe;
+
+import javax.swing.JPanel;
 
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class PanneauEquation extends JPanel {
+public abstract class PanneauEquation extends JPanel {
 
 	protected Graphe graphe;
 
 	/**
 	 * @param graphe
-	 *            the graphe to set
+	 * @since 0.0.0
 	 */
 	public void setGraphe(Graphe graphe) {
 		this.graphe = graphe;

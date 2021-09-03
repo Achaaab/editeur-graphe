@@ -1,30 +1,31 @@
-package com.github.achaaab.graphe.fonction.dictionnaire;
+package com.github.achaaab.graphe.fonction.catalogue;
 
 import com.github.achaaab.graphe.fonction.Fonction;
 import com.github.achaaab.graphe.fonction.FonctionParametree;
+
+import static java.lang.Math.log;
 
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class Sqrt extends FonctionParametree {
+public class Ln extends FonctionParametree {
 
 	/**
-	 * 
 	 * @param sousFonction
+	 * @since 0.0.0
 	 */
-	public Sqrt(Fonction sousFonction) {
+	public Ln(Fonction sousFonction) {
 		super(sousFonction);
 	}
 
 	@Override
 	public double evaluer() {
-		return Math.sqrt(parametres[0]);
+		return log(parametres[0]);
 	}
 
 	@Override
-	public String getTexte() {
-		return "sqrt(" + getTexteSousFonctions() + ")";
+	public String toString() {
+		return "ln(" + getTexteSousFonctions() + ")";
 	}
-
 }

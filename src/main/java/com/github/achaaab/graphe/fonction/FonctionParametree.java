@@ -17,6 +17,7 @@ public abstract class FonctionParametree extends FonctionAbstraite {
 
 	/**
 	 * @param sousFonctions
+	 * @since 0.0.0
 	 */
 	public FonctionParametree(Fonction... sousFonctions) {
 
@@ -31,7 +32,7 @@ public abstract class FonctionParametree extends FonctionAbstraite {
 
 		Fonction sousFonction;
 
-		for (int indexSousFonction = 0; indexSousFonction < arite; indexSousFonction++) {
+		for (var indexSousFonction = 0; indexSousFonction < arite; indexSousFonction++) {
 
 			sousFonction = sousFonctions[indexSousFonction];
 			parametres[indexSousFonction] = sousFonction.evaluer(x);
@@ -42,6 +43,7 @@ public abstract class FonctionParametree extends FonctionAbstraite {
 
 	/**
 	 * @return
+	 * @since 0.0.0
 	 */
 	public abstract double evaluer();
 
@@ -51,7 +53,7 @@ public abstract class FonctionParametree extends FonctionAbstraite {
 	protected String getTexteSousFonctions() {
 
 		return stream(sousFonctions).
-				map(Fonction::getTexte).
+				map(Fonction::toString).
 				collect(joining(SEPARATEUR_PARAMETRES));
 	}
 }

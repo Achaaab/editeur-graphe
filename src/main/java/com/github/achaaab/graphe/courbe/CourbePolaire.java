@@ -1,120 +1,67 @@
 package com.github.achaaab.graphe.courbe;
 
-import java.awt.Shape;
-import java.awt.geom.GeneralPath;
-
-import com.github.achaaab.graphe.equation.Equation;
 import com.github.achaaab.graphe.equation.EquationPolaire;
 import com.github.achaaab.graphe.presentation.courbe.PanneauCourbePolaire;
 
+import java.awt.geom.GeneralPath;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 /**
- * courbe definie par une equation polaire
- * 
+ * courbe définie par une équation polaire
+ *
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class CourbePolaire extends CourbeAbstraite {
-
-	private EquationPolaire equation;
+public class CourbePolaire extends CourbeAbstraite<EquationPolaire> {
 
 	/**
-	 * 
+	 * @since 0.0.0
+	 */
+	public CourbePolaire() {
+		this(NOM_COURBE_DEFAUT, new EquationPolaire());
+	}
+
+	/**
 	 * @param nom
 	 * @param equation
+	 * @since 0.0.0
 	 */
 	public CourbePolaire(String nom, EquationPolaire equation) {
 
-		super(nom);
+		super(nom, equation);
 
 		min = 0;
-		max = 2 * Math.PI;
-		pas = Math.PI / 500;
-
-		this.equation = equation;
+		max = 2 * PI;
+		pas = PI / 500;
 
 		presentation = new PanneauCourbePolaire(this);
-
 	}
 
 	@Override
-	public Shape getForme() {
+	protected void ajouterPoint(GeneralPath forme, double theta) {
 
-		GeneralPath forme = new GeneralPath();
+		var rho = equation.getRho(theta);
 
-		double theta;
+		var x = rho * cos(theta);
+		var y = rho * sin(theta);
 
-		for (theta = min; theta + pas < max; theta += pas) {
-
-			if (interpolee) {
-				ajouterSegment(forme, theta, theta + pas);
-			} else {
-				ajouterPoint(forme, theta);
-			}
-
-		}
-
-		if (interpolee) {
-			ajouterSegment(forme, theta, max);
-		} else {
-			ajouterPoint(forme, max);
-		}
-
-		return forme;
-
-	}
-
-	/**
-	 * 
-	 * @param forme
-	 * @param theta
-	 */
-	private void ajouterPoint(GeneralPath forme, double theta) {
-
-		double rho = equation.getRho(theta);
-
-		double x = rho * Math.cos(theta);
-		double y = rho * Math.sin(theta);
-
-		ajouterSegment(forme, x, y, x, y);
-
-	}
-
-	/**
-	 * 
-	 * @param forme
-	 * @param theta0
-	 * @param theta1
-	 */
-	private void ajouterSegment(GeneralPath forme, double theta0, double theta1) {
-
-		double rho0 = equation.getRho(theta0);
-		double x0 = rho0 * Math.cos(theta0);
-		double y0 = rho0 * Math.sin(theta0);
-
-		double rho1 = equation.getRho(theta1);
-		double x1 = rho1 * Math.cos(theta1);
-		double y1 = rho1 * Math.sin(theta1);
-
-		ajouterSegment(forme, x0, y0, x1, y1);
-
+		Courbe.ajouterSegment(forme, x, y, x, y);
 	}
 
 	@Override
-	public Equation getEquation() {
-		return equation;
-	}
+	protected void ajouterSegment(GeneralPath forme, double theta0, double theta1) {
 
-	/**
-	 * 
-	 * @return l'equation polaire de la courbe
-	 */
-	public EquationPolaire getEquationPolaire() {
-		return equation;
-	}
+		var rho0 = equation.getRho(theta0);
+		var x0 = rho0 * cos(theta0);
+		var y0 = rho0 * sin(theta0);
 
-	@Override
-	public TypeCourbe getType() {
-		return TypeCourbe.POLAIRE;
-	}
+		var rho1 = equation.getRho(theta1);
+		var x1 = rho1 * cos(theta1);
+		var y1 = rho1 * sin(theta1);
 
+		Courbe.ajouterSegment(forme, x0, y0, x1, y1);
+	}
 }

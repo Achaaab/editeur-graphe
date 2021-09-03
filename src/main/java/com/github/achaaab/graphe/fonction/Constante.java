@@ -6,10 +6,11 @@ package com.github.achaaab.graphe.fonction;
  */
 public class Constante extends FonctionAbstraite {
 
-	private double valeur;
+	private final double valeur;
 
 	/**
 	 * @param valeur
+	 * @since 0.0.0
 	 */
 	public Constante(double valeur) {
 		this.valeur = valeur;
@@ -21,8 +22,7 @@ public class Constante extends FonctionAbstraite {
 	}
 
 	@Override
-	public String getTexte() {
+	public String toString() {
 		return Double.toString(valeur);
 	}
-
 }

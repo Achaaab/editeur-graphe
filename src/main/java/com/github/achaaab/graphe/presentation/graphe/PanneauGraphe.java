@@ -1,7 +1,6 @@
 package com.github.achaaab.graphe.presentation.graphe;
 
 import com.github.achaaab.graphe.Graphe;
-import com.github.achaaab.graphe.courbe.Courbe;
 import com.github.achaaab.utilitaire.swing.PanneauTampon;
 
 import java.awt.Color;
@@ -13,10 +12,15 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+import static java.awt.Color.DARK_GRAY;
+import static java.awt.Color.WHITE;
+import static java.awt.Cursor.CROSSHAIR_CURSOR;
+import static java.awt.Cursor.getPredefinedCursor;
 import static java.awt.geom.AffineTransform.getScaleInstance;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * @author Jonathan Guéhenneux
@@ -39,6 +43,7 @@ public class PanneauGraphe extends PanneauTampon {
 	/**
 	 * @param graphe
 	 * @param panneauCoordonnees
+	 * @since 0.0.0
 	 */
 	public PanneauGraphe(Graphe graphe, PanneauCoordonnees panneauCoordonnees) {
 
@@ -47,52 +52,49 @@ public class PanneauGraphe extends PanneauTampon {
 		this.graphe = graphe;
 		this.panneauCoordonnees = panneauCoordonnees;
 
-		setBackground(Color.WHITE);
-		setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		setBackground(WHITE);
+		setCursor(getPredefinedCursor(CROSSHAIR_CURSOR));
 
 		setPreferredSize(DIMENSION_IDEALE);
 		setMinimumSize(DIMENSION_MINIMUM);
 
 		new EcouteurGraphe(this);
-
 	}
 
 	@Override
 	public void dessiner() {
 
-		/*
-		 * dessin des axes
-		 */
+		// dessin des axes
 
-		Shape axeX = getAxeX();
-		Shape axeY = getAxeY();
+		var axeX = getAxeX();
+		var axeY = getAxeY();
 
-		graphique.setColor(Color.DARK_GRAY);
+		graphique.setColor(DARK_GRAY);
 
 		graphique.draw(axeX);
 		graphique.draw(axeY);
 
-		/*
-		 * dessin des courbes
-		 */
+		// dessin des courbes
 
 		var transformationAffine = getTransformationAffine();
 
-		List<Courbe> courbes = graphe.getCourbes();
-		Shape formeCourbe;
+		var courbes = graphe.getCourbes();
 
-		for (Courbe courbe : courbes) {
+		for (var courbe : courbes) {
 
-			graphique.setColor(courbe.getCouleur());
-			formeCourbe = courbe.getForme();
-			formeCourbe = transformationAffine.createTransformedShape(formeCourbe);
-			graphique.draw(formeCourbe);
+			var color = courbe.getCouleur();
+			var shape = courbe.getForme();
+
+			shape = transformationAffine.createTransformedShape(shape);
+
+			graphique.setColor(color);
+			graphique.draw(shape);
 		}
 	}
 
 	/**
-	 * @return la transformation affine permettant d'adapter les coordonnees du
-	 * graphe aux coordonnees de l'ecran
+	 * @return transformation affine permettant d'adapter les coordonnées du graphe aux coordonnées de l'écran
+	 * @since 0.0.0
 	 */
 	private AffineTransform getTransformationAffine() {
 
@@ -101,9 +103,7 @@ public class PanneauGraphe extends PanneauTampon {
 		var yMin = graphe.getYMin();
 		var yMax = graphe.getYMax();
 
-		/*
-		 * transformation affine du graphe
-		 */
+		// transformation affine du graphe
 
 		var transformationAffine = getScaleInstance(
 				largeur / (xMax - xMin),
@@ -116,90 +116,65 @@ public class PanneauGraphe extends PanneauTampon {
 
 	/**
 	 * @return
+	 * @since 0.0.0
 	 */
 	private Shape getAxeX() {
 
-		/*
-		 * parametres de l'axe
-		 */
+		// paramètres de l'axe
 
-		double xMin = graphe.getXMin();
-		double xMax = graphe.getXMax();
-		double graduationX = graphe.getGraduationX();
+		var xMin = graphe.getXMin();
+		var xMax = graphe.getXMax();
+		var graduationX = graphe.getGraduationX();
 
-		/*
-		 * forme de l'axe
-		 */
+		// forme de l'axe
 
-		GeneralPath axeX = new GeneralPath();
+		var axeX = new GeneralPath();
 
-		/*
-		 * transormation affine pour passer des coordonnees du graphe aux
-		 * coordonnees de l'ecran
-		 */
+		// transormation affine pour passer des coordonnées du graphe aux coordonnées de l'écran
 
-		AffineTransform transformationAffine = getTransformationAffine();
+		var transformationAffine = getTransformationAffine();
 
-		/*
-		 * ligne de l'axe
-		 */
+		// ligne de l'axe
 
-		Point2D minAxeGraphe = new Point2D.Double(xMin, 0);
-		Point2D maxAxeGraphe = new Point2D.Double(xMax, 0);
+		var minAxeGraphe = new Point2D.Double(xMin, 0);
+		var maxAxeGraphe = new Point2D.Double(xMax, 0);
 
-		Point2D minAxeEcran = new Point2D.Double();
-		Point2D maxAxeEcran = new Point2D.Double();
+		var minAxeEcran = new Point2D.Double();
+		var maxAxeEcran = new Point2D.Double();
 
 		transformationAffine.transform(minAxeGraphe, minAxeEcran);
 		transformationAffine.transform(maxAxeGraphe, maxAxeEcran);
 
 		axeX.append(new Line2D.Double(minAxeEcran, maxAxeEcran), false);
 
-		/*
-		 * graduations de l'axe
-		 */
+		// graduations positives
 
-		Point2D pointGraduationGraphe;
-		Point2D pointGraduationEcran;
+		for (var x = graduationX; x <= xMax; x += graduationX) {
 
-		Line2D graduation;
+			var pointGraduationGraphe = new Point2D.Double(x, 0);
+			var pointGraduationEcran = new Point2D.Double();
 
-		double x;
+			transformationAffine.transform(pointGraduationGraphe, pointGraduationEcran);
 
-		/*
-		 * graduations positives
-		 */
-
-		for (x = graduationX; x <= xMax; x += graduationX) {
-
-			pointGraduationGraphe = new Point2D.Double(x, 0);
-			pointGraduationEcran = new Point2D.Double();
-
-			transformationAffine.transform(pointGraduationGraphe,
-					pointGraduationEcran);
-
-			graduation = new Line2D.Double(pointGraduationEcran.getX(),
-					pointGraduationEcran.getY(), pointGraduationEcran.getX(),
-					pointGraduationEcran.getY() - 3);
+			var graduation = new Line2D.Double(
+					pointGraduationEcran.getX(), pointGraduationEcran.getY(),
+					pointGraduationEcran.getX(), pointGraduationEcran.getY() - 3);
 
 			axeX.append(graduation, false);
 		}
 
-		/*
-		 * graduations negatives
-		 */
+		// graduations négatives
 
-		for (x = -graduationX; x >= xMin; x -= graduationX) {
+		for (var x = -graduationX; x >= xMin; x -= graduationX) {
 
-			pointGraduationGraphe = new Point2D.Double(x, 0);
-			pointGraduationEcran = new Point2D.Double();
+			var pointGraduationGraphe = new Point2D.Double(x, 0);
+			var pointGraduationEcran = new Point2D.Double();
 
-			transformationAffine.transform(pointGraduationGraphe,
-					pointGraduationEcran);
+			transformationAffine.transform(pointGraduationGraphe, pointGraduationEcran);
 
-			graduation = new Line2D.Double(pointGraduationEcran.getX(),
-					pointGraduationEcran.getY(), pointGraduationEcran.getX(),
-					pointGraduationEcran.getY() - 3);
+			var graduation = new Line2D.Double(
+					pointGraduationEcran.getX(), pointGraduationEcran.getY(),
+					pointGraduationEcran.getX(), pointGraduationEcran.getY() - 3);
 
 			axeX.append(graduation, false);
 		}
@@ -209,92 +184,65 @@ public class PanneauGraphe extends PanneauTampon {
 
 	/**
 	 * @return
+	 * @since 0.0.0
 	 */
 	private Shape getAxeY() {
 
-		/*
-		 * parametres de l'axe
-		 */
+		// paramètres de l'axe
 
-		double yMin = graphe.getYMin();
-		double yMax = graphe.getYMax();
-		double graduationY = graphe.getGraduationY();
+		var yMin = graphe.getYMin();
+		var yMax = graphe.getYMax();
+		var graduationY = graphe.getGraduationY();
 
-		/*
-		 * forme de l'axe
-		 */
+		// forme de l'axe
 
-		GeneralPath axeY = new GeneralPath();
+		var axeY = new GeneralPath();
 
-		/*
-		 * transormation affine pour passer des coordonnees du graphe aux
-		 * coordonnees de l'ecran
-		 */
+		// transormation affine pour passer des coordonnées du graphe aux coordonnées de l'écran
 
-		AffineTransform transformationAffine = getTransformationAffine();
+		var transformationAffine = getTransformationAffine();
 
-		/*
-		 * ligne de l'axe
-		 */
+		// ligne de l'axe
 
-		Point2D minAxeGraphe = new Point2D.Double(0, yMin);
-		Point2D maxAxeGraphe = new Point2D.Double(0, yMax);
+		var minAxeGraphe = new Point2D.Double(0, yMin);
+		var maxAxeGraphe = new Point2D.Double(0, yMax);
 
-		Point2D minAxeEcran = new Point2D.Double();
-		Point2D maxAxeEcran = new Point2D.Double();
+		var minAxeEcran = new Point2D.Double();
+		var maxAxeEcran = new Point2D.Double();
 
 		transformationAffine.transform(minAxeGraphe, minAxeEcran);
 		transformationAffine.transform(maxAxeGraphe, maxAxeEcran);
 
 		axeY.append(new Line2D.Double(minAxeEcran, maxAxeEcran), false);
 
-		/*
-		 * graduations de l'axe
-		 */
+		// graduations positives
 
-		Point2D pointGraduationGraphe;
-		Point2D pointGraduationEcran;
+		for (var y = graduationY; y <= yMax; y += graduationY) {
 
-		Line2D graduation;
+			var pointGraduationGraphe = new Point2D.Double(0, y);
+			var pointGraduationEcran = new Point2D.Double();
 
-		double y;
+			transformationAffine.transform(pointGraduationGraphe, pointGraduationEcran);
 
-		/*
-		 * graduations positives
-		 */
-
-		for (y = graduationY; y <= yMax; y += graduationY) {
-
-			pointGraduationGraphe = new Point2D.Double(0, y);
-			pointGraduationEcran = new Point2D.Double();
-
-			transformationAffine.transform(pointGraduationGraphe,
-					pointGraduationEcran);
-
-			graduation = new Line2D.Double(pointGraduationEcran.getX(),
-					pointGraduationEcran.getY(),
-					pointGraduationEcran.getX() + 3, pointGraduationEcran
-					.getY());
+			var graduation = new Line2D.Double(
+					pointGraduationEcran.getX(), pointGraduationEcran.getY(),
+					pointGraduationEcran.getX() + 3, pointGraduationEcran.getY());
 
 			axeY.append(graduation, false);
 		}
 
-		/*
-		 * graduations negatives
-		 */
+		// graduations négatives
 
-		for (y = -graduationY; y >= yMin; y -= graduationY) {
+		for (var y = -graduationY; y >= yMin; y -= graduationY) {
 
-			pointGraduationGraphe = new Point2D.Double(0, y);
-			pointGraduationEcran = new Point2D.Double();
+			var pointGraduationGraphe = new Point2D.Double(0, y);
+			var pointGraduationEcran = new Point2D.Double();
 
-			transformationAffine.transform(pointGraduationGraphe,
-					pointGraduationEcran);
+			transformationAffine.transform(pointGraduationGraphe, pointGraduationEcran);
 
-			graduation = new Line2D.Double(pointGraduationEcran.getX(),
-					pointGraduationEcran.getY(),
-					pointGraduationEcran.getX() + 3, pointGraduationEcran
-					.getY());
+			var graduation = new Line2D.Double(
+					pointGraduationEcran.getX(), pointGraduationEcran.getY(),
+					pointGraduationEcran.getX() + 3, pointGraduationEcran.getY());
 
 			axeY.append(graduation, false);
 		}
@@ -307,26 +255,27 @@ public class PanneauGraphe extends PanneauTampon {
 	 * @param y0
 	 * @param x1
 	 * @param y1
+	 * @since 0.0.0
 	 */
 	public void grossir(int x0, int y0, int x1, int y1) {
 
-		AffineTransform transformationAffine = getTransformationAffine();
+		var transformationAffine = getTransformationAffine();
 
-		Point2D coinCadre0 = new Point2D.Double(x0, y0);
-		Point2D coinCadre1 = new Point2D.Double(x1, y1);
+		var coinCadre0 = new Point2D.Double(x0, y0);
+		var coinCadre1 = new Point2D.Double(x1, y1);
 
-		Point2D coinGraphe0 = new Point2D.Double();
-		Point2D coinGraphe1 = new Point2D.Double();
+		var coinGraphe0 = new Point2D.Double();
+		var coinGraphe1 = new Point2D.Double();
 
 		try {
 
 			transformationAffine.inverseTransform(coinCadre0, coinGraphe0);
 			transformationAffine.inverseTransform(coinCadre1, coinGraphe1);
 
-			double xMin = Math.min(coinGraphe0.getX(), coinGraphe1.getX());
-			double yMin = Math.min(coinGraphe0.getY(), coinGraphe1.getY());
-			double xMax = Math.max(coinGraphe0.getX(), coinGraphe1.getX());
-			double yMax = Math.max(coinGraphe0.getY(), coinGraphe1.getY());
+			var xMin = min(coinGraphe0.getX(), coinGraphe1.getX());
+			var yMin = min(coinGraphe0.getY(), coinGraphe1.getY());
+			var xMax = max(coinGraphe0.getX(), coinGraphe1.getX());
+			var yMax = max(coinGraphe0.getY(), coinGraphe1.getY());
 
 			graphe.setXMin(xMin);
 			graphe.setYMin(yMin);
@@ -347,13 +296,14 @@ public class PanneauGraphe extends PanneauTampon {
 	/**
 	 * @param xEcran
 	 * @param yEcran
+	 * @since 0.0.0
 	 */
-	public final void actualiserCoordonneesCurseur(int xEcran, int yEcran) {
+	public void actualiserCoordonneesCurseur(int xEcran, int yEcran) {
 
-		Point2D curseurEcran = new Point2D.Double(xEcran, yEcran);
-		Point2D curseurGraphe = new Point2D.Double();
+		var curseurEcran = new Point2D.Double(xEcran, yEcran);
+		var curseurGraphe = new Point2D.Double();
 
-		AffineTransform transformationAffine = getTransformationAffine();
+		var transformationAffine = getTransformationAffine();
 
 		try {
 

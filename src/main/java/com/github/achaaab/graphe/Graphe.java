@@ -16,12 +16,11 @@ public class Graphe {
 
 	private double graduationX, graduationY;
 
-	private final List<Courbe> courbes;
-
+	private final List<Courbe<?>> courbes;
 	private final PresentationGraphe presentation;
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public Graphe() {
 
@@ -39,8 +38,9 @@ public class Graphe {
 
 	/**
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public void ajouterCourbe(Courbe courbe) {
+	public void ajouterCourbe(Courbe<?> courbe) {
 
 		courbes.add(courbe);
 
@@ -50,8 +50,9 @@ public class Graphe {
 
 	/**
 	 * @param courbe
+	 * @since 0.0.0
 	 */
-	public void supprimerCourbe(Courbe courbe) {
+	public void supprimerCourbe(Courbe<?> courbe) {
 
 		courbes.remove(courbe);
 
@@ -60,119 +61,133 @@ public class Graphe {
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public void actualiserListeCourbes() {
 		presentation.actualiserListeCourbes();
 	}
 
 	/**
-	 * @return the courbes
+	 * @return
+	 * @since 0.0.0
 	 */
-	public List<Courbe> getCourbes() {
+	public List<Courbe<?>> getCourbes() {
 		return courbes;
 	}
 
 	/**
-	 * @return the xMin
+	 * @return
+	 * @since 0.0.0
 	 */
 	public double getXMin() {
 		return xMin;
 	}
 
 	/**
-	 * @param xMin the xMin to set
+	 * @param xMin
+	 * @since 0.0.0
 	 */
 	public void setXMin(double xMin) {
 		this.xMin = xMin;
 	}
 
 	/**
-	 * @return the xMax
+	 * @return
+	 * @since 0.0.0
 	 */
 	public double getXMax() {
 		return xMax;
 	}
 
 	/**
-	 * @param xMax the xMax to set
+	 * @param xMax
+	 * @since 0.0.0
 	 */
 	public void setXMax(double xMax) {
 		this.xMax = xMax;
 	}
 
 	/**
-	 * @return the yMin
+	 * @return
+	 * @since 0.0.0
 	 */
 	public double getYMin() {
 		return yMin;
 	}
 
 	/**
-	 * @param yMin the yMin to set
+	 * @param yMin
+	 * @since 0.0.0
 	 */
 	public void setYMin(double yMin) {
 		this.yMin = yMin;
 	}
 
 	/**
-	 * @return the yMax
+	 * @return
+	 * @since 0.0.0
 	 */
 	public double getYMax() {
 		return yMax;
 	}
 
 	/**
-	 * @param yMax the yMax to set
+	 * @param yMax
+	 * @since 0.0.0
 	 */
 	public void setYMax(double yMax) {
 		this.yMax = yMax;
 	}
 
 	/**
-	 * @return the graduationX
+	 * @return
+	 * @since 0.0.0
 	 */
 	public double getGraduationX() {
 		return graduationX;
 	}
 
 	/**
-	 * @param graduationX the graduationX to set
+	 * @param graduationX
+	 * @since 0.0.0
 	 */
 	public void setGraduationX(double graduationX) {
 		this.graduationX = graduationX;
 	}
 
 	/**
-	 * @return the graduationY
+	 * @return
+	 * @since 0.0.0
 	 */
 	public double getGraduationY() {
 		return graduationY;
 	}
 
 	/**
-	 * @param graduationY the graduationY to set
+	 * @param graduationY
+	 * @since 0.0.0
 	 */
 	public void setGraduationY(double graduationY) {
 		this.graduationY = graduationY;
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public void actualiserFenetre() {
 		presentation.actualiserFenetre();
 	}
 
 	/**
-	 *
+	 * @since 0.0.0
 	 */
 	public void actualiserGraphe() {
 		presentation.actualiserGraphe();
 	}
 
 	/**
-	 * @return the presentation
+	 * @return
+	 * @since 0.0.0
 	 */
 	public PresentationGraphe getPresentation() {
 		return presentation;

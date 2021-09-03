@@ -1,19 +1,25 @@
 package com.github.achaaab.graphe.courbe;
 
+import com.github.achaaab.graphe.equation.Equation;
 import com.github.achaaab.graphe.presentation.courbe.PanneauCourbe;
 
 import java.awt.Color;
+import java.awt.Shape;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
+
+import static java.awt.Color.BLACK;
 
 /**
- * classe abstraite definissant une courbe quelconque
+ * classe abstraite définissant une courbe quelconque
  *
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public abstract class CourbeAbstraite implements Courbe {
+public abstract class CourbeAbstraite<E extends Equation> implements Courbe<E> {
 
+	protected static final String NOM_COURBE_DEFAUT = "courbe_defaut";
+
+	protected E equation;
 	protected String nom;
 	protected double min;
 	protected double max;
@@ -25,24 +31,80 @@ public abstract class CourbeAbstraite implements Courbe {
 
 	/**
 	 * @param nom
+	 * @param equation équation de la courbe
+	 * @since 0.0.0
 	 */
-	public CourbeAbstraite(String nom) {
-		this(nom, Color.BLACK);
+	public CourbeAbstraite(String nom, E equation) {
+		this(nom, equation, BLACK);
 	}
 
 	/**
 	 * @param nom
+	 * @param equation équation de la courbe
 	 * @param couleur
+	 * @since 0.0.0
 	 */
-	public CourbeAbstraite(String nom, Color couleur) {
+	public CourbeAbstraite(String nom, E equation, Color couleur) {
 
 		this.nom = nom;
+		this.equation = equation;
 		this.couleur = couleur;
 
 		min = -10;
 		max = 10;
 		pas = 0.1;
 		interpolee = true;
+	}
+
+	@Override
+	public Shape getForme() {
+
+		var forme = new GeneralPath();
+
+		double x;
+
+		for (x = min; x + pas < max; x += pas) {
+
+			if (interpolee) {
+				ajouterSegment(forme, x, x + pas);
+			} else {
+				ajouterPoint(forme, x);
+			}
+
+		}
+
+		if (interpolee) {
+			ajouterSegment(forme, x, max);
+		} else {
+			ajouterPoint(forme, max);
+		}
+
+		return forme;
+	}
+
+	/**
+	 * @param forme
+	 * @param x
+	 * @since 0.0.0
+	 */
+	protected abstract void ajouterPoint(GeneralPath forme, double x);
+
+	/**
+	 * @param forme
+	 * @param x0
+	 * @param x1
+	 * @since 0.0.0
+	 */
+	protected abstract void ajouterSegment(GeneralPath forme, double x0, double x1);
+
+	@Override
+	public String getType() {
+		return equation.getType();
+	}
+
+	@Override
+	public E getEquation() {
+		return equation;
 	}
 
 	@Override
@@ -58,82 +120,63 @@ public abstract class CourbeAbstraite implements Courbe {
 		presentation.actualiserCouleurCourbe();
 	}
 
-	/**
-	 * @return the min
-	 */
-	public final double getMin() {
+	@Override
+	public double getMin() {
 		return min;
 	}
 
-	/**
-	 * @param min the min to set
-	 */
-	public final void setMin(double min) {
+	@Override
+	public void setMin(double min) {
 		this.min = min;
 	}
 
-	/**
-	 * @return the max
-	 */
-	public final double getMax() {
+	@Override
+	public double getMax() {
 		return max;
 	}
 
 	@Override
-	public final void setMax(double max) {
+	public void setMax(double max) {
 		this.max = max;
 	}
 
 	@Override
-	public final double getPas() {
+	public double getPas() {
 		return pas;
 	}
 
 	@Override
-	public final void setPas(double pas) {
+	public void setPas(double pas) {
 		this.pas = pas;
 	}
 
 	@Override
-	public final boolean isInterpolee() {
+	public boolean isInterpolee() {
 		return interpolee;
 	}
 
 	@Override
-	public final void setInterpolee(boolean interpolee) {
+	public void setInterpolee(boolean interpolee) {
 		this.interpolee = interpolee;
 	}
 
 	@Override
-	public final String getNom() {
+	public String getNom() {
 		return nom;
 	}
 
 	@Override
-	public final void setNom(String nom) {
+	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		return nom;
 	}
 
 	@Override
-	public final PanneauCourbe getPresentation() {
+	public PanneauCourbe getPresentation() {
 		return presentation;
-	}
-
-	/**
-	 * @param forme
-	 * @param x0
-	 * @param y0
-	 * @param x1
-	 * @param y1
-	 */
-	protected static void ajouterSegment(GeneralPath forme, double x0,
-										 double y0, double x1, double y1) {
-
-		forme.append(new Line2D.Double(x0, y0, x1, y1), false);
 	}
 }

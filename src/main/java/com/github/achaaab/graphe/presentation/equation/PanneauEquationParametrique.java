@@ -1,21 +1,17 @@
 package com.github.achaaab.graphe.presentation.equation;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.github.achaaab.graphe.equation.EquationParametrique;
+import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
+import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import com.github.achaaab.graphe.equation.EquationParametrique;
-import com.github.achaaab.graphe.fonction.Fonction;
-import com.github.achaaab.graphe.fonction.fabrique.FabriqueFonction;
-import com.github.achaaab.graphe.grammaire.ErreurSyntaxe;
-import com.github.achaaab.utilitaire.GestionnaireException;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
+import static java.awt.GridBagConstraints.BOTH;
 
 /**
  * @author Jonathan Guéhenneux
@@ -23,16 +19,17 @@ import static com.github.achaaab.utilitaire.GestionnaireException.traiter;
  */
 public class PanneauEquationParametrique extends PanneauEquation {
 
+	private final EquationParametrique equationParametrique;
+
 	private JLabel labelF;
 	private JTextField champF;
 
 	private JLabel labelG;
 	private JTextField champG;
 
-	private EquationParametrique equationParametrique;
-
 	/**
 	 * @param equationParametrique
+	 * @since 0.0.0
 	 */
 	public PanneauEquationParametrique(EquationParametrique equationParametrique) {
 
@@ -46,48 +43,50 @@ public class PanneauEquationParametrique extends PanneauEquation {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void creerComposants() {
 
 		labelF = new JLabel("x = f(t) = ");
 		labelG = new JLabel("y = g(t) = ");
 
-		Fonction f = equationParametrique.getF();
-		Fonction g = equationParametrique.getG();
+		var f = equationParametrique.getF();
+		var g = equationParametrique.getG();
 
 		champF = new JTextField(50);
-		champF.setText(f.getTexte());
+		champF.setText(f.toString());
 
 		champG = new JTextField(50);
-		champG.setText(g.getTexte());
+		champG.setText(g.toString());
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
 	private void ajouterComposants() {
 
-		GridBagConstraints contraintes = new GridBagConstraints();
+		var contraintes = new GridBagConstraints();
 		contraintes.insets = new Insets(2, 2, 2, 2);
-		
+
 		contraintes.gridx = 0;
 		contraintes.gridy = 0;
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
 		add(labelF, contraintes);
 
-		contraintes.gridx = 1;
-		contraintes.gridy = 0;
-		contraintes.gridwidth = 1;
-		contraintes.gridheight = 1;
-		add(champF, contraintes);
-
 		contraintes.gridx = 0;
 		contraintes.gridy = 1;
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
 		add(labelG, contraintes);
+
+		contraintes.fill = BOTH;
+
+		contraintes.gridx = 1;
+		contraintes.gridy = 0;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+		add(champF, contraintes);
 
 		contraintes.gridx = 1;
 		contraintes.gridy = 1;
@@ -97,18 +96,16 @@ public class PanneauEquationParametrique extends PanneauEquation {
 	}
 
 	/**
-	 * 
+	 * @since 0.0.0
 	 */
-	private final void ajouterEcouteurs() {
+	private void ajouterEcouteurs() {
 
 		champF.addActionListener(evenement -> {
 
 			try {
 
-				String texteF = champF.getText();
-
-				Fonction f = FabriqueFonction.getInstance().creerFonction(
-						texteF);
+				var texteF = champF.getText();
+				var f = FabriqueFonction.INSTANCE.creerFonction(texteF);
 
 				equationParametrique.setF(f);
 				graphe.actualiserGraphe();
@@ -123,10 +120,8 @@ public class PanneauEquationParametrique extends PanneauEquation {
 
 			try {
 
-				String texteG = champG.getText();
-
-				Fonction g = FabriqueFonction.getInstance().creerFonction(
-						texteG);
+				var texteG = champG.getText();
+				var g = FabriqueFonction.INSTANCE.creerFonction(texteG);
 
 				equationParametrique.setG(g);
 				graphe.actualiserGraphe();

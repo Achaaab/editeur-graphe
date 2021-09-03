@@ -1,30 +1,31 @@
-package com.github.achaaab.graphe.fonction.dictionnaire;
+package com.github.achaaab.graphe.fonction.catalogue;;
 
 import com.github.achaaab.graphe.fonction.Fonction;
 import com.github.achaaab.graphe.fonction.FonctionParametree;
 
-import static java.lang.Math.cosh;
+import static java.lang.Math.tanh;
 
 /**
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class Ch extends FonctionParametree {
+public class Tanh extends FonctionParametree {
 
 	/**
 	 * @param sousFonction
+	 * @since 0.0.0
 	 */
-	public Ch(Fonction sousFonction) {
+	public Tanh(Fonction sousFonction) {
 		super(sousFonction);
 	}
 
 	@Override
 	public double evaluer() {
-		return cosh(parametres[0]);
+		return tanh(parametres[0]);
 	}
 
 	@Override
-	public String getTexte() {
-		return "ch(" + getTexteSousFonctions() + ")";
+	public String toString() {
+		return "tanh(" + getTexteSousFonctions() + ")";
 	}
 }

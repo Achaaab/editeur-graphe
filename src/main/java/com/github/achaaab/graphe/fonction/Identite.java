@@ -6,10 +6,11 @@ package com.github.achaaab.graphe.fonction;
  */
 public class Identite extends FonctionAbstraite {
 
-	private String nomVariable;
+	private final String nomVariable;
 
 	/**
 	 * @param nomVariable
+	 * @since 0.0.0
 	 */
 	public Identite(String nomVariable) {
 		this.nomVariable = nomVariable;
@@ -21,8 +22,7 @@ public class Identite extends FonctionAbstraite {
 	}
 
 	@Override
-	public String getTexte() {
+	public String toString() {
 		return nomVariable;
 	}
-
 }

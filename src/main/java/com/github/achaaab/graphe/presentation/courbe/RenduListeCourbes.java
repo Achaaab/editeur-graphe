@@ -13,7 +13,9 @@ import java.awt.Dimension;
  * @author Jonathan Guéhenneux
  * @since 0.0.0
  */
-public class RenduListeCourbes implements ListCellRenderer<Courbe> {
+public class RenduListeCourbes implements ListCellRenderer<Courbe<?>> {
+
+	public static final RenduListeCourbes INSTANCE = new RenduListeCourbes();
 
 	private static final DefaultListCellRenderer RENDU_DEFAUT = new DefaultListCellRenderer();
 
@@ -22,23 +24,10 @@ public class RenduListeCourbes implements ListCellRenderer<Courbe> {
 	 */
 	private static final Dimension DIMENSION_OPTIMALE = new Dimension(0, 20);
 
-	private static RenduListeCourbes instance;
-
 	/**
-	 * @return
-	 */
-	public static synchronized RenduListeCourbes getInstance() {
-
-		if (instance == null) {
-			instance = new RenduListeCourbes();
-		}
-
-		return instance;
-
-	}
-
-	/**
-	 * constructeur prive pour appliquer le patron de conception Singleton
+	 * constructeur privé pour appliquer le patron de conception Singleton
+	 *
+	 * @since 0.0.0
 	 */
 	private RenduListeCourbes() {
 
@@ -46,10 +35,10 @@ public class RenduListeCourbes implements ListCellRenderer<Courbe> {
 
 	@Override
 	public Component getListCellRendererComponent(
-			JList<? extends Courbe> courbes, Courbe courbe, int indexCourbe,
+			JList<? extends Courbe<?>> courbes, Courbe<?> courbe, int indexCourbe,
 			boolean courbeSelectionnee, boolean focus) {
 
-		JLabel cellule = (JLabel) RENDU_DEFAUT.getListCellRendererComponent(
+		var cellule = (JLabel) RENDU_DEFAUT.getListCellRendererComponent(
 				courbes, courbe, indexCourbe, courbeSelectionnee, focus);
 
 		if (courbe != null) {
